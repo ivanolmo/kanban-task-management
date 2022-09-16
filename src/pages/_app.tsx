@@ -6,7 +6,7 @@ import { SessionProvider } from 'next-auth/react';
 import type { AppType } from 'next/dist/shared/lib/utils';
 
 import superjson from 'superjson';
-import Header from '../components/Header';
+import Header from '@/components/Header';
 import type { AppRouter } from '../server/router';
 import '../styles/globals.css';
 
