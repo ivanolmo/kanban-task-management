@@ -16,7 +16,7 @@ const Button: React.FC<Props> = ({
 }) => {
   return (
     <button
-      className={`flex justify-center items-center gap-1 btn group ${variant} ${size} ${
+      className={`flex justify-center items-center gap-1 btn group text-md ${variant} ${size} ${
         disabled ? 'disabled' : ''
       }`}
       disabled={disabled}
