@@ -1,3 +1,69 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  body {
+    @apply h-full antialiased bg-indigo;
+  }
+
+  /* XL */
+  h1 {
+    @apply text-2xl font-bold leading-tight;
+  }
+
+  /* L */
+  h2 {
+    @apply text-lg font-bold leading-tight;
+  }
+
+  /* M */
+  h3 {
+    @apply text-sm font-bold leading-tight;
+  }
+
+  /* S */
+  h4 {
+    @apply text-xs font-bold leading-tight tracking-wide;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-[1.125rem] font-bold rounded-full cursor-pointer;
+  }
+
+  /* sizes */
+  .rg {
+    @apply py-2.5;
+  }
+
+  .lg {
+    @apply py-4;
+  }
+
+  /* variant/color */
+  .primary {
+    @apply text-white bg-violet-700 hover:bg-violet-400;
+  }
+
+  .secondary {
+    @apply text-violet-700 bg-violet-700/10 hover:bg-violet-700/25;
+  }
+
+  .delete {
+    @apply text-white bg-red-600 hover:bg-red-400;
+  }
+
+  .disabled {
+    @apply opacity-25 cursor-not-allowed;
+  }
+
+  .no-bg {
+    @apply px-0 bg-transparent text-violet-700 hover:text-violet-400;
+  }
+}
