@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply h-full antialiased leading-tight bg-indigo;
+    @apply h-full antialiased leading-tight bg-violet-50;
   }
 
   /* XL */
@@ -28,7 +28,7 @@
 
   /* S */
   h4 {
-    @apply text-sm font-bold tracking-wide;
+    @apply text-sm font-bold tracking-widest;
   }
 }
 
