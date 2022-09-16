@@ -8,27 +8,27 @@
   }
 
   body {
-    @apply h-full antialiased bg-indigo;
+    @apply h-full antialiased leading-tight bg-indigo;
   }
 
   /* XL */
   h1 {
-    @apply text-2xl font-bold leading-tight;
+    @apply text-xl font-bold;
   }
 
   /* L */
   h2 {
-    @apply text-lg font-bold leading-tight;
+    @apply text-lg font-bold;
   }
 
   /* M */
   h3 {
-    @apply text-sm font-bold leading-tight;
+    @apply font-bold text-md;
   }
 
   /* S */
   h4 {
-    @apply text-xs font-bold leading-tight tracking-wide;
+    @apply text-sm font-bold tracking-wide;
   }
 }
 
