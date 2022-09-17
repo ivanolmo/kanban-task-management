@@ -3,7 +3,7 @@ import SidebarItem from './Sidebar/SidebarItem';
 const Sidebar = () => {
   return (
     <aside
-      className='!w-64 hidden md:block transition-all ease-in-out'
+      className='!w-64 hidden md:block transition-all ease-in-out z-10'
       aria-label='Sidebar'
     >
       <div className='flex flex-col justify-between text-slate bg-white border-r border-indigo h-screen py-8'>
