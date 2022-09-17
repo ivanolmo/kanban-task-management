@@ -1,27 +1,35 @@
+import { useState } from 'react';
 import type { NextPage } from 'next';
-import Button from '../components/Button';
+
+import Button from '@/components/Button';
+import Sidebar from '@/components/Sidebar';
+import PlusSign from '@/assets/icon-add-task-mobile.svg';
+import ShowSidebar from '@/assets/icon-show-sidebar.svg';
 import { trpc } from '../utils/trpc';
 
 const Home: NextPage = () => {
   // const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
 
   return (
-    <>
-      <main className='flex flex-col items-center justify-center min-h-screen px-8'>
+    <main className='relative'>
+      <div className='flex items-center min-h-screen'>
+        {/* sidebar will be toggled by button */}
+        {sidebarVisible && <Sidebar />}
         {/* default view with no data */}
-        <section className='flex flex-col items-center gap-6'>
+        <section className='flex flex-col items-center gap-6 flex-1'>
           {/* no boards exist */}
           <h2 className='text-center text-slate'>
             You haven&apos;t created any boards yet. Add one below to get
             started!
           </h2>
-          <Button variant='primary' size='rg'>
-            <svg width='12' height='12' xmlns='http://www.w3.org/2000/svg'>
-              <path
-                fill='#FFF'
-                d='M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z'
-              />
-            </svg>
+          <Button
+            variant='primary'
+            size='rg'
+            // temp onClick to close sidebar
+            onClick={() => setSidebarVisible(!sidebarVisible)}
+          >
+            <PlusSign />
             <span>Create New Board</span>
           </Button>
           {/* existing board but no columns */}
@@ -29,17 +37,20 @@ const Home: NextPage = () => {
             This board is empty. Create a new column to get started.
           </h2>
           <Button variant='primary' size='rg'>
-            <svg width='12' height='12' xmlns='http://www.w3.org/2000/svg'>
-              <path
-                fill='#FFF'
-                d='M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z'
-              />
-            </svg>
+            <PlusSign />
             <span>Add New Column</span>
           </Button> */}
         </section>
-      </main>
-    </>
+      </div>
+      <div className='absolute left-0 bottom-8'>
+        <div
+          className='flex justify-center items-center bg-violet-700 p-5 rounded-r-full cursor-pointer'
+          onClick={() => setSidebarVisible(!sidebarVisible)}
+        >
+          <ShowSidebar className='' />
+        </div>
+      </div>
+    </main>
   );
 };
 
