@@ -67,3 +67,67 @@
     @apply px-0 bg-transparent text-violet-700 hover:text-violet-400;
   }
 }
+
+.text-body-md {
+  font-weight: bold;
+}
+
+// theme switcher styling
+.theme-label:before {
+  content: '';
+  animation-name: reverse;
+  animation-duration: 350ms;
+  animation-fill-mode: forwards;
+  transition: all 350ms ease-in;
+  @apply absolute bg-white top-0.5 left-0.5 w-3.5 h-3.5 rounded-full;
+}
+
+.checkbox {
+  @apply bg-violet-700;
+}
+
+.checkbox:checked {
+  & + .theme-label {
+    @apply bg-violet-700 border-violet-700;
+
+    &:before {
+      animation-name: switch;
+      animation-duration: 350ms;
+      animation-fill-mode: forwards;
+      @apply bg-white;
+    }
+
+    &:after {
+      transition-delay: 350ms;
+      @apply opacity-100;
+    }
+  }
+}
+
+@keyframes reverse {
+  0% {
+    left: 22px;
+    width: 14px;
+  }
+  60% {
+    left: 16px;
+    width: 20px;
+  }
+  100% {
+    left: 2px;
+  }
+}
+
+@keyframes switch {
+  0% {
+    left: 2px;
+  }
+  60% {
+    left: 16px;
+    width: 20px;
+  }
+  100% {
+    left: 22px;
+    width: 14px;
+  }
+}

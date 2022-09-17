@@ -8,6 +8,7 @@ module.exports = {
       current: 'currentColor',
       white: '#ffffff',
       black: '#000000',
+      blue: '#0827f5',
       gunmetal: {
         700: '#3e3f4e',
         800: '#2b2c37',
@@ -24,6 +25,7 @@ module.exports = {
         400: '#a8a4ff',
         700: '#635fc7',
       },
+      yellow: '#ffb81c',
       zinc: '#20212c',
     },
     fontSize: {
