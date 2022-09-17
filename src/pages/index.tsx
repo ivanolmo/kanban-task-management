@@ -42,13 +42,11 @@ const Home: NextPage = () => {
           </Button> */}
         </section>
       </div>
-      <div className='absolute left-0 bottom-8'>
-        <div
-          className='flex justify-center items-center bg-violet-700 p-5 rounded-r-full cursor-pointer'
-          onClick={() => setSidebarVisible(!sidebarVisible)}
-        >
-          <ShowSidebar className='' />
-        </div>
+      <div
+        className='hidden absolute left-0 bottom-8 md:flex justify-center items-center bg-violet-700 p-5 rounded-r-full cursor-pointer'
+        onClick={() => setSidebarVisible(!sidebarVisible)}
+      >
+        <ShowSidebar className='' />
       </div>
     </main>
   );
