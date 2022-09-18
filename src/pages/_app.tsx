@@ -2,38 +2,29 @@
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { loggerLink } from '@trpc/client/links/loggerLink';
 import { withTRPC } from '@trpc/next';
-import { SessionProvider } from 'next-auth/react';
-import type { AppType } from 'next/dist/shared/lib/utils';
-
+import { AppProps } from 'next/app';
 import superjson from 'superjson';
-import Header from '@/components/Header';
-import type { AppRouter } from '../server/router';
-import '../styles/globals.scss';
 
-const MyApp: AppType = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
+import { UserContextProvider } from 'src/context/UserContext';
+import Header from '@/components/Header';
+import type { AppRouter } from '../server/router/app.router';
+import { getBaseUrl } from 'src/utils/getBaseUrl';
+import '../styles/globals.scss';
+import { trpc } from '@/utils/trpc';
+
+const MyApp = ({ Component, pageProps }: AppProps) => {
+  const { data, error, isLoading } = trpc.useQuery(['users.me']);
+  console.table({ data, error, isLoading });
   return (
-    <SessionProvider session={session}>
+    <UserContextProvider value={data}>
       <Header />
       <Component {...pageProps} />
-    </SessionProvider>
+    </UserContextProvider>
   );
-};
-
-const getBaseUrl = () => {
-  if (typeof window !== 'undefined') return ''; // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
-    /**
-     * If you want to use SSR, you need to use the server's full URL
-     * @link https://trpc.io/docs/ssr
-     */
     const url = `${getBaseUrl()}/api/trpc`;
 
     return {
