@@ -3,7 +3,7 @@ import { signJwt } from '@/utils/jwt';
 import sendLoginEmail from '@/utils/mailer';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { TRPCError } from '@trpc/server';
-import { baseUrl } from 'src/constants';
+import { getBaseUrl } from 'src/utils/getBaseUrl';
 import { serialize } from 'cookie';
 import z from 'zod';
 
@@ -88,7 +88,7 @@ export const userRouter = createRouter()
 
       await sendLoginEmail({
         otp: encode(`${otp.id}:${user.email}`),
-        url: baseUrl,
+        url: getBaseUrl(),
         email: user.email,
       });
 
