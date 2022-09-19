@@ -26,7 +26,7 @@ const verifyOTPSchema = z.object({
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type RequestOTPInput = z.infer<typeof requestOTPSchema>;
 
-export const userRouter = createRouter()
+const userRouter = createRouter()
   .mutation('register-user', {
     input: createUserSchema,
     resolve: async ({ ctx, input }) => {
@@ -138,3 +138,5 @@ export const userRouter = createRouter()
       return ctx.user;
     },
   });
+
+export default userRouter;
