@@ -27,7 +27,7 @@ const getUserFromRequest = (req: NextApiRequest) => {
   }
 };
 
-export const createContext = async ({
+export const createContext = ({
   req,
   res,
 }: {
