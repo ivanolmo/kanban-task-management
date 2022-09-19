@@ -27,6 +27,7 @@ module.exports = {
       },
       yellow: '#ffb81c',
       zinc: '#20212c',
+      gradient: 'rgba(0, 0, 0, 0.7)',
     },
     fontSize: {
       xl: '1.5rem',
