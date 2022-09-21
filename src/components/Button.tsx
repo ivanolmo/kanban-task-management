@@ -6,6 +6,7 @@ interface Props {
   size?: string;
   disabled?: boolean;
   hidden?: boolean;
+  wide?: boolean;
 }
 
 const Button: React.FC<Props> = ({
@@ -16,14 +17,15 @@ const Button: React.FC<Props> = ({
   size = 'rg',
   disabled,
   hidden,
+  wide,
   ...rest
 }) => {
   return (
     <button
       type={type}
       className={`flex justify-center items-center gap-1 btn group text-md ${variant} ${size} ${
-        disabled ? 'disabled' : ''
-      } ${hidden ? 'hidden' : ''}`}
+        wide ? 'wide' : ''
+      } ${disabled ? 'disabled' : ''} ${hidden ? 'hidden' : ''}`}
       disabled={disabled}
       onClick={onClick}
       {...rest}

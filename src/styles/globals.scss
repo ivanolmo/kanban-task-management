@@ -46,6 +46,10 @@
     @apply py-4;
   }
 
+  .wide {
+    @apply w-full;
+  }
+
   /* variant/color */
   .primary {
     @apply text-white bg-violet-700 hover:bg-violet-400;
