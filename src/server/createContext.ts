@@ -1,17 +1,15 @@
-import { unstable_getServerSession } from 'next-auth';
-
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { inferAsyncReturnType } from '@trpc/server';
 import { CreateNextContextOptions } from '@trpc/server/adapters/next';
+
+import { getKanbanAuthSession } from './common/get-server-session';
 import { prisma } from './db/client';
 
 export const createContext = async (opts: CreateNextContextOptions) => {
   const { req, res } = opts;
 
-  const session =
-    req && res && (await unstable_getServerSession(req, res, authOptions));
+  const session = req && res && (await getKanbanAuthSession({ req, res }));
 
-  return { req, res, prisma, session };
+  return { session, prisma };
 };
 
 export type Context = inferAsyncReturnType<typeof createContext>;
