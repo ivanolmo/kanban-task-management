@@ -1,60 +1,45 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+
 import { createRouter } from '../createRouter';
 
-const boardColumnSchema = z.object({
-  status: z.string(),
-});
-
 const createBoardSchema = z.object({
-  title: z.string(),
-  boardColumns: z.array(boardColumnSchema),
+  boardName: z.string(),
+  columns: z.array(z.object({ columnName: z.string() })),
 });
 
-export type CreateBoardInput = z.infer<typeof createBoardSchema>;
+export type CreateBoardInput = z.TypeOf<typeof createBoardSchema>;
 
-const boardRouter = createRouter()
-  .mutation('create-board', {
-    input: createBoardSchema,
-    resolve: async ({ ctx, input }) => {
-      if (!ctx.user) {
-        return new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'You must be logged in to create a board',
-        });
-      }
+const boardRouter = createRouter().mutation('create-board', {
+  input: createBoardSchema,
+  resolve: async ({ ctx, input }) => {
+    if (!ctx || !ctx.session?.user) {
+      return new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'You must be logged in to create a board',
+      });
+    }
 
-      const board = await ctx.prisma.board.create({
-        data: {
-          ...input,
-          user: {
-            connect: {
-              id: ctx.user.id,
-            },
+    const board = await ctx.prisma.board.create({
+      data: {
+        boardName: input.boardName,
+        columns: {
+          createMany: {
+            data: input.columns.map((column) => ({
+              columnName: column.columnName,
+            })),
           },
         },
-      });
-
-      return board;
-    },
-  })
-  .query('boards', {
-    resolve: async ({ ctx }) => {
-      if (!ctx.user) {
-        return new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'You must be logged in to view boards',
-        });
-      }
-
-      const boards = await ctx.prisma.board.findMany({
-        where: {
-          userId: ctx.user.id,
+        user: {
+          connect: {
+            id: ctx.session.user.id,
+          },
         },
-      });
+      },
+    });
 
-      return boards;
-    },
-  });
+    return board;
+  },
+});
 
 export default boardRouter;
