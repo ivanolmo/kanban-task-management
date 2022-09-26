@@ -1,25 +1,21 @@
-// src/pages/_app.tsx
+import { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { loggerLink } from '@trpc/client/links/loggerLink';
 import { withTRPC } from '@trpc/next';
-import { AppProps } from 'next/app';
 import superjson from 'superjson';
 
-import { UserContextProvider } from 'src/context/UserContext';
-import Header from '@/components/Header';
-import type { AppRouter } from '../server/router/app.router';
-import { getBaseUrl } from 'src/utils/getBaseUrl';
+import type { AppRouter } from '@/server/router/app';
+import { getBaseUrl } from '@/utils/getBaseUrl';
 import '../styles/globals.scss';
-import { trpc } from '@/utils/trpc';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const { data, error, isLoading } = trpc.useQuery(['users.me']);
-  console.table({ data, error, isLoading });
   return (
-    <UserContextProvider value={data}>
-      <Header />
+    <SessionProvider>
       <Component {...pageProps} />
-    </UserContextProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </SessionProvider>
   );
 };
 
