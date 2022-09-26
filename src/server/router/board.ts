@@ -7,7 +7,12 @@ const createBoardSchema = z.object({
   columns: z.array(z.object({ columnName: z.string() })),
 });
 
+const createColumnSchema = z.object({
+  columns: z.array(z.object({ boardId: z.string(), columnName: z.string() })),
+});
+
 export type CreateBoardInput = z.TypeOf<typeof createBoardSchema>;
+export type CreateColumnInput = z.TypeOf<typeof createColumnSchema>;
 
 export const boardRouter = createProtectedRouter()
   .mutation('create-board', {
@@ -32,6 +37,40 @@ export const boardRouter = createProtectedRouter()
       });
 
       return board;
+    },
+  })
+  .mutation('add-columns', {
+    input: createColumnSchema,
+    resolve: async ({ ctx, input }) => {
+      const columns = await ctx.prisma.board.update({
+        where: {
+          id: input?.columns[0]?.boardId,
+        },
+        data: {
+          columns: {
+            createMany: {
+              data: input?.columns?.map((column) => ({
+                columnName: column.columnName,
+              })),
+            },
+          },
+        },
+      });
+
+      return columns;
+    },
+  })
+  .query('get-board-columns', {
+    resolve: async ({ ctx }) => {
+      const columns = await ctx.prisma.column.findMany({
+        where: {
+          board: {
+            userId: ctx?.session?.user?.id,
+          },
+        },
+      });
+
+      return columns;
     },
   })
   .query('get-boards', {
