@@ -1,10 +1,7 @@
-import { useState } from 'react';
-
+import ThemeSwitcher from '../ui/ThemeSwitcher';
 import SidebarItem from '@/components/Sidebar/SidebarItem';
 import BoardIcon from '@/assets/icon-board.svg';
-import DarkThemeIcon from '@/assets/icon-dark-theme.svg';
 import HideSidebarIcon from '@/assets/icon-hide-sidebar.svg';
-import LightThemeIcon from '@/assets/icon-light-theme.svg';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 import type { Board } from 'src/types/boardTypes';
 
@@ -17,10 +14,6 @@ type SidebarProps = {
 };
 
 const SidebarComp = (props: SidebarProps) => {
-  const [checkboxChecked, setCheckboxChecked] = useState(false);
-
-  const handleClick = () => setCheckboxChecked(!checkboxChecked);
-
   return (
     <aside
       className='!w-64 hidden md:block flex-shrink-0 z-10'
@@ -56,33 +49,7 @@ const SidebarComp = (props: SidebarProps) => {
           </ul>
         </div>
         <div className='flex flex-col gap-4'>
-          <div className='flex justify-center items-center gap-6 mx-3 py-3.5 bg-violet-50 rounded-lg'>
-            <LightThemeIcon
-              className={`ease-in-out duration-700 ${
-                checkboxChecked ? 'fill-slate' : 'fill-yellow'
-              }`}
-            />
-            {/* theme switcher */}
-            <div className='relative'>
-              <input
-                type='checkbox'
-                id='toggle'
-                className='hidden checkbox'
-                onClick={() => handleClick()}
-                checked={checkboxChecked}
-                readOnly
-              />
-              <label
-                htmlFor='toggle'
-                className='relative flex w-10 h-5 bg-violet-700 border border-violet-700 rounded-full cursor-pointer theme-label'
-              />
-            </div>
-            <DarkThemeIcon
-              className={`ease-in-out duration-700 ${
-                checkboxChecked ? 'fill-blue' : 'fill-slate'
-              }`}
-            />
-          </div>
+          <ThemeSwitcher />
           <div
             className='flex items-center gap-3 mx-3 py-3.5 px-4 rounded-lg cursor-pointer group'
             onClick={() => props.toggleSidebar()}
