@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply h-screen antialiased leading-tight bg-violet-50;
+    @apply relative h-full min-w-[375px] antialiased leading-tight bg-violet-50;
   }
 
   /* XL */
