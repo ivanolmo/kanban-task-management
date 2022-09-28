@@ -39,6 +39,19 @@ export const boardRouter = createProtectedRouter()
       return board;
     },
   })
+  .mutation('delete-board', {
+    input: z.object({
+      boardId: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      const board = await ctx.prisma.board.delete({
+        where: {
+          id: input.boardId,
+        },
+      });
+      return board;
+    },
+  })
   .query('get-boards', {
     resolve: async ({ ctx }) => {
       const boards = await ctx.prisma.board.findMany({
