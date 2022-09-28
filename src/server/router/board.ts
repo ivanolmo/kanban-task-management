@@ -39,40 +39,6 @@ export const boardRouter = createProtectedRouter()
       return board;
     },
   })
-  .mutation('add-columns', {
-    input: createColumnSchema,
-    resolve: async ({ ctx, input }) => {
-      const columns = await ctx.prisma.board.update({
-        where: {
-          id: input?.columns[0]?.boardId,
-        },
-        data: {
-          columns: {
-            createMany: {
-              data: input?.columns?.map((column) => ({
-                columnName: column.columnName,
-              })),
-            },
-          },
-        },
-      });
-
-      return columns;
-    },
-  })
-  .query('get-board-columns', {
-    resolve: async ({ ctx }) => {
-      const columns = await ctx.prisma.column.findMany({
-        where: {
-          board: {
-            userId: ctx?.session?.user?.id,
-          },
-        },
-      });
-
-      return columns;
-    },
-  })
   .query('get-boards', {
     resolve: async ({ ctx }) => {
       const boards = await ctx.prisma.board.findMany({
