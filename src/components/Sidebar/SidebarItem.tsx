@@ -20,7 +20,7 @@ const SidebarItem = (props: SidebarItemProps) => {
         onClick={() => props.handleSelectBoard(props.board)}
       >
         <BoardIcon className='fill-current' />
-        <span className=''>{props.board.boardName}</span>
+        <span className='capitalize'>{props.board.boardName}</span>
       </a>
     </li>
   );
