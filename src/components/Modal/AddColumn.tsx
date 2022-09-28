@@ -13,11 +13,12 @@ const AddColumn = (props: {
 }) => {
   const queryClient = useQueryClient();
   const { mutate, error, isLoading } = trpc.useMutation(
-    ['boards.add-columns'],
+    ['columns.create-columns'],
     {
       onSuccess: () => {
         props.toggleAddColumnModal();
-        queryClient.invalidateQueries('boards.get-board-columns');
+        // TODO check this
+        queryClient.invalidateQueries('columns.get-columns');
       },
     }
   );
