@@ -8,7 +8,8 @@ import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 import type { Board } from 'src/types/boardTypes';
 
 type SidebarProps = {
-  boards: Board[] | undefined | null;
+  // boards: Board[] | undefined;
+  boards: any[] | undefined;
   toggleSidebar: () => void;
 };
 

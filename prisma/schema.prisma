@@ -59,7 +59,7 @@ model Board {
   columns   Column[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String?
 }
 
@@ -70,7 +70,7 @@ model Column {
   tasks      Task[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  board      Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  board      Board    @relation(fields: [boardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Task {
@@ -80,7 +80,7 @@ model Task {
   subtasks  Subtask[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  column    Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  column    Column    @relation(fields: [columnId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Subtask {
@@ -89,5 +89,5 @@ model Subtask {
   taskId      String   @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }

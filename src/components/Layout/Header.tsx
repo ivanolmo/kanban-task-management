@@ -10,7 +10,8 @@ import LogoDark from '@/assets/logo-dark.svg';
 import type { Board } from 'src/types/boardTypes';
 
 type HeaderProps = {
-  boards: Board[];
+  // boards: Board[];
+  boards: any[] | undefined;
   sidebarVisible: boolean;
 };
 
