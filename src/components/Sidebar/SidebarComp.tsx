@@ -1,19 +1,19 @@
-import ThemeSwitcher from '../ui/ThemeSwitcher';
+import useStore from 'src/store/boardStore';
 import SidebarItem from '@/components/Sidebar/SidebarItem';
+import ThemeSwitcher from '@/components/ui/ThemeSwitcher';
 import BoardIcon from '@/assets/icon-board.svg';
 import HideSidebarIcon from '@/assets/icon-hide-sidebar.svg';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
+
 import type { Board } from 'src/types/boardTypes';
 
 type SidebarProps = {
-  boards: Board[] | undefined;
-  selectedBoardId: string;
-  handleSelectBoard: (board: Board) => void;
-  toggleAddBoardModal: () => void;
+  boards: Board[] | undefined | null;
   toggleSidebar: () => void;
 };
 
 const SidebarComp = (props: SidebarProps) => {
+  const store = useStore();
   return (
     <aside
       className='!w-64 hidden md:block flex-shrink-0 z-10'
@@ -28,16 +28,15 @@ const SidebarComp = (props: SidebarProps) => {
             {props.boards?.map((board) => (
               <SidebarItem
                 key={board.id}
-                selected={board.id === props.selectedBoardId}
+                selected={board.id === store.selectedBoard?.id}
                 board={board}
-                handleSelectBoard={props.handleSelectBoard}
               />
             ))}
             <li className='py-4 px-6 rounded-r-full mr-4'>
               <a
                 href='#'
                 className='flex items-center gap-3 text-md font-bold '
-                onClick={() => props.toggleAddBoardModal()}
+                onClick={() => store.toggleAddBoardModal()}
               >
                 <BoardIcon className='fill-violet-700' />
                 <span className='flex items-center gap-1 text-violet-700'>

@@ -1,20 +1,25 @@
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
+// import { useQueryClient } from 'react-query';
 
-import Button from '../Button';
-import CrossSign from '@/assets/icon-cross.svg';
-import PlusSign from '@/assets/icon-add-task-mobile.svg';
+import useStore from 'src/store/boardStore';
 import { trpc } from '@/utils/trpc';
-import { CreateBoardInput } from '@/server/router/board';
+import Button from '../Button';
+import CrossIcon from '@/assets/icon-cross.svg';
+import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 
-const AddBoard = (props: { toggleAddBoardModal: () => void }) => {
-  const queryClient = useQueryClient();
+import type { CreateBoardInput } from '@/server/router/board';
+
+const AddBoard = () => {
+  const store = useStore();
+
+  // const queryClient = useQueryClient();
   const { mutate, error, isLoading } = trpc.useMutation(
     ['boards.create-board'],
     {
       onSuccess: () => {
-        props.toggleAddBoardModal();
-        queryClient.invalidateQueries('boards.get-boards');
+        store.toggleAddBoardModal();
+        // TODO check this
+        // queryClient.invalidateQueries('boards.get-boards');
       },
     }
   );
@@ -27,7 +32,7 @@ const AddBoard = (props: { toggleAddBoardModal: () => void }) => {
   } = useForm<CreateBoardInput>({
     defaultValues: {
       boardName: '',
-      columns: [],
+      columns: [{ columnName: 'Todo' }, { columnName: 'Doing' }],
     },
     mode: 'onBlur',
   });
@@ -51,8 +56,8 @@ const AddBoard = (props: { toggleAddBoardModal: () => void }) => {
     <div className='space-y-6 w-full'>
       <div className='flex justify-between items-center w-full'>
         <h2 className=''>Add New Board</h2>
-        <span onClick={() => props.toggleAddBoardModal()}>
-          <CrossSign />
+        <span onClick={() => store.toggleAddBoardModal()}>
+          <CrossIcon />
         </span>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-6 w-full'>
@@ -110,7 +115,7 @@ const AddBoard = (props: { toggleAddBoardModal: () => void }) => {
                   defaultValue={field.id}
                 />
                 <button type='button' onClick={() => remove(index)}>
-                  <CrossSign />
+                  <CrossIcon />
                 </button>
                 {errors?.columns?.[index] && (
                   <span className='absolute top-4 right-10 text-red-600 text-body-sm'>
@@ -126,7 +131,7 @@ const AddBoard = (props: { toggleAddBoardModal: () => void }) => {
           wide
           onClick={() => append({ columnName: '' })}
         >
-          <PlusSign className='fill-violet-700' />
+          <PlusIcon className='fill-violet-700' />
           <span>Add New Column</span>
         </Button>
         <Button type='submit' wide>

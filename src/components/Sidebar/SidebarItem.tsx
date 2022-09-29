@@ -1,13 +1,21 @@
+import useStore from 'src/store/boardStore';
 import BoardIcon from '@/assets/icon-board.svg';
+
 import type { Board } from 'src/types/boardTypes';
 
 type SidebarItemProps = {
   board: Board;
   selected: boolean;
-  handleSelectBoard: (board: Board) => void;
 };
 
 const SidebarItem = (props: SidebarItemProps) => {
+  const store = useStore();
+
+  const handleSelect = () => {
+    store.toggleMobileSidebar();
+    store.setSelectedBoard(props.board);
+  };
+
   return (
     <li
       className={`py-4 px-6 rounded-r-full mr-4 ${
@@ -17,7 +25,7 @@ const SidebarItem = (props: SidebarItemProps) => {
       <a
         href='#'
         className='flex items-center gap-3 text-md font-bold'
-        onClick={() => props.handleSelectBoard(props.board)}
+        onClick={() => handleSelect()}
       >
         <BoardIcon className='fill-current' />
         <span className='capitalize'>{props.board.boardName}</span>
