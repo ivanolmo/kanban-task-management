@@ -15,7 +15,7 @@ export const Modal = (props: ModalProps) => {
         className={`absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center gap-0 bg-white rounded-lg ${
           props.mobile
             ? 'top-1/3 p-0 w-9/12 max-w-sm'
-            : 'top-1/2 p-8 w-11/12 md:w-9/12 max-w-xl'
+            : 'top-1/2 p-6 md:p-8 w-11/12 md:w-9/12 max-w-[30rem]'
         }`}
       >
         {props.children}

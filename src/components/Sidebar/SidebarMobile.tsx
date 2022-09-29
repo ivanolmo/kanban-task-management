@@ -1,35 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-import SidebarItem from './SidebarItem';
+import useStore from 'src/store/boardStore';
+import ModalContainer from '@/components/Modal/ModalContainer';
+import SidebarItem from '@/components/Sidebar/SidebarItem';
 import ThemeSwitcher from '@/components/ui/ThemeSwitcher';
 import BoardIcon from '@/assets/icon-board.svg';
 import ChevronDownIcon from '@/assets/icon-chevron-down.svg';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 import LogoMobile from '@/assets/logo-mobile.svg';
-import ModalContainer from '../Modal/ModalContainer';
+
 import type { Board } from 'src/types/boardTypes';
 
 type SidebarMobileProps = {
   boards: Board[] | undefined;
-  selectedBoard: Board | undefined;
-  selectedBoardId: string | undefined;
-  handleSelectBoard: (board: Board) => void;
-  toggleAddBoardModal: () => void;
-  toggleSidebarMobile: () => void;
 };
 
 const SidebarMobile = (props: SidebarMobileProps) => {
-  const [menuVisible, setMenuVisible] = useState(false);
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLDivElement | null>(null);
 
-  const handleAddBoard = () => {
-    toggleMenu();
-    props.toggleAddBoardModal();
-  };
+  const store = useStore();
 
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
+  const handleAddBoard = () => {
+    store.toggleMobileSidebar();
+    store.toggleAddBoardModal();
   };
 
   useEffect(() => {
@@ -39,7 +33,7 @@ const SidebarMobile = (props: SidebarMobileProps) => {
         !sidebarRef.current.contains(e.target as Node) &&
         !buttonRef?.current?.contains(e.target as Node)
       ) {
-        setMenuVisible(false);
+        store.toggleMobileSidebar();
       }
     };
 
@@ -55,19 +49,19 @@ const SidebarMobile = (props: SidebarMobileProps) => {
       <LogoMobile className='' />
       <div
         className='flex items-center gap-2'
-        onClick={() => toggleMenu()}
+        onClick={() => store.toggleMobileSidebar()}
         ref={buttonRef}
       >
         <h2 className='capitalize'>
-          {props.selectedBoard?.boardName ?? 'No Boards'}
+          {store.selectedBoard?.boardName ?? 'No Boards'}
         </h2>
         <div className='mt-1 cursor-pointer'>
           <ChevronDownIcon
-            className={`transition ${menuVisible && 'rotate-180'}`}
+            className={`transition ${store.showMobileSidebar && 'rotate-180'}`}
           />
         </div>
       </div>
-      {menuVisible && (
+      {store.showMobileSidebar && (
         <ModalContainer mobile>
           <div
             className='max-w-sm w-full z-50 rounded-xl overflow-hidden'
@@ -82,9 +76,8 @@ const SidebarMobile = (props: SidebarMobileProps) => {
                   {props.boards?.map((board) => (
                     <SidebarItem
                       key={board.id}
-                      selected={board.id === props.selectedBoardId}
+                      selected={board.id === store.selectedBoard?.id}
                       board={board}
-                      handleSelectBoard={props.handleSelectBoard}
                     />
                   ))}
                   <li className='py-4 px-6 rounded-r-full mr-4'>

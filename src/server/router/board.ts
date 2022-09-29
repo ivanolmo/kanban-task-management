@@ -11,8 +11,15 @@ const createColumnSchema = z.object({
   columns: z.array(z.object({ boardId: z.string(), columnName: z.string() })),
 });
 
+const editBoardSchema = z.object({
+  id: z.string(),
+  boardName: z.string(),
+  columns: z.array(z.object({ columnName: z.string() })),
+});
+
 export type CreateBoardInput = z.TypeOf<typeof createBoardSchema>;
 export type CreateColumnInput = z.TypeOf<typeof createColumnSchema>;
+export type EditBoardInput = z.TypeOf<typeof editBoardSchema>;
 
 export const boardRouter = createProtectedRouter()
   .mutation('create-board', {
@@ -39,14 +46,34 @@ export const boardRouter = createProtectedRouter()
       return board;
     },
   })
+  .mutation('edit-board', {
+    input: editBoardSchema,
+    resolve: async ({ ctx, input }) => {
+      const board = await ctx.prisma.board.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          boardName: input.boardName,
+          columns: {
+            createMany: {
+              data: input.columns.map((column) => ({
+                columnName: column.columnName,
+              })),
+            },
+          },
+        },
+      });
+
+      return board;
+    },
+  })
   .mutation('delete-board', {
-    input: z.object({
-      boardId: z.string(),
-    }),
+    input: z.string(),
     resolve: async ({ ctx, input }) => {
       const board = await ctx.prisma.board.delete({
         where: {
-          id: input.boardId,
+          id: input,
         },
       });
       return board;
@@ -57,6 +84,9 @@ export const boardRouter = createProtectedRouter()
       const boards = await ctx.prisma.board.findMany({
         where: {
           userId: ctx?.session?.user?.id,
+        },
+        orderBy: {
+          createdAt: 'asc',
         },
         include: {
           columns: true,

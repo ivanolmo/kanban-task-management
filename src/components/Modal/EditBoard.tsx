@@ -1,38 +1,39 @@
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { useEffect } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 // import { useQueryClient } from 'react-query';
 
 import useStore from 'src/store/boardStore';
 import { trpc } from '@/utils/trpc';
-import Button from '../Button';
+import Button from '@/components/Button';
 import CrossIcon from '@/assets/icon-cross.svg';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 
-import type { CreateBoardInput } from '@/server/router/board';
+import type { EditBoardInput } from '@/server/router/board';
 
-const AddBoard = () => {
+const EditBoard = () => {
   const store = useStore();
 
   // const queryClient = useQueryClient();
-  const { mutate, error, isLoading } = trpc.useMutation(
-    ['boards.create-board'],
-    {
-      onSuccess: () => {
-        store.toggleAddBoardModal();
-        // TODO check this
-        // queryClient.invalidateQueries('boards.get-boards');
-      },
-    }
-  );
+  const { mutate, error, isLoading } = trpc.useMutation(['boards.edit-board'], {
+    onSuccess: () => {
+      store.toggleEditBoardModal();
+      console.log('edit success');
+      // TODO check this
+      // queryClient.invalidateQueries('columns.get-columns');
+    },
+  });
 
   const {
     handleSubmit,
     register,
+    reset,
     control,
     formState: { errors },
-  } = useForm<CreateBoardInput>({
+  } = useForm<EditBoardInput>({
     defaultValues: {
-      boardName: '',
-      columns: [{ columnName: 'Todo' }, { columnName: 'Doing' }],
+      id: store.selectedBoard?.id,
+      boardName: store.selectedBoard?.boardName,
+      columns: store.selectedBoard?.columns,
     },
     mode: 'onBlur',
   });
@@ -42,21 +43,19 @@ const AddBoard = () => {
     name: 'columns',
   });
 
-  const onSubmit = (data: CreateBoardInput) => {
-    // remove columns with no name
-    data = {
-      boardName: data.boardName,
-      columns: data.columns.filter((column) => column.columnName !== ''),
-    };
-
+  const onSubmit = (data: EditBoardInput) => {
     mutate(data);
   };
+
+  useEffect(() => {
+    reset(store.selectedBoard as EditBoardInput);
+  }, [reset, store.selectedBoard]);
 
   return (
     <div className='space-y-6 w-full'>
       <div className='flex justify-between items-center w-full'>
-        <h2 className=''>Add New Board</h2>
-        <span onClick={() => store.toggleAddBoardModal()}>
+        <h2 className=''>Edit Board</h2>
+        <span onClick={() => store.toggleEditBoardModal()}>
           <CrossIcon />
         </span>
       </div>
@@ -99,20 +98,15 @@ const AddBoard = () => {
                 key={field.id}
                 className='relative flex items-center gap-2 w-full'
               >
-                <Controller
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      placeholder='e.g. Todo, Doing, Done'
-                      className={`block w-full border border-slate/25 rounded-md p-4 ${
-                        errors?.columns?.[index] && 'border-red-600'
-                      }`}
-                    />
-                  )}
-                  name={`columns.${index}.columnName`}
-                  control={control}
-                  // rules={{ required: true }}
-                  defaultValue={field.id}
+                <input
+                  key={field.id}
+                  {...register(`columns.${index}.columnName`, {
+                    required: true,
+                  })}
+                  placeholder='e.g. Todo, Doing, Done'
+                  className={`block w-full border border-slate/25 rounded-md p-4 ${
+                    errors?.columns?.[index] && 'border-red-600'
+                  }`}
                 />
                 <button type='button' onClick={() => remove(index)}>
                   <CrossIcon />
@@ -135,11 +129,11 @@ const AddBoard = () => {
           <span>Add New Column</span>
         </Button>
         <Button type='submit' wide>
-          <span>Create New Board</span>
+          <span>Save Changes</span>
         </Button>
       </form>
     </div>
   );
 };
 
-export default AddBoard;
+export default EditBoard;
