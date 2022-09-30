@@ -2,6 +2,8 @@ import NextAuth, { type NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 import EmailProvider from 'next-auth/providers/email';
 import GithubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
+import TwitchProvider from 'next-auth/providers/twitch';
 
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/server/db/client';
@@ -20,13 +22,21 @@ export const authOptions: NextAuthOptions = {
         },
       },
     }),
+    DiscordProvider({
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
+    }),
     GithubProvider({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    TwitchProvider({
+      clientId: env.TWITCH_CLIENT_ID,
+      clientSecret: env.TWITCH_CLIENT_SECRET,
     }),
   ],
   callbacks: {
