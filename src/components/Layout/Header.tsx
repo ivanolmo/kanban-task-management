@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import { signOut } from 'next-auth/react';
 
 import useStore from 'src/store/boardStore';
 import Button from '@/components/Button';
 import SidebarMobile from '@/components/Sidebar/SidebarMobile';
+import CrossIcon from '@/assets/icon-cross.svg';
+import EditIcon from '@/assets/icon-edit.svg';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
+import SignOutIcon from '@/assets/icon-sign-out.svg';
 import ThreeDotsIcon from '@/assets/icon-vertical-ellipsis.svg';
 import LogoDark from '@/assets/logo-dark.svg';
 
@@ -68,20 +72,35 @@ const Header = (props: HeaderProps) => {
             }`}
             onClick={() => toggleMenu()}
           >
-            <ThreeDotsIcon />
+            <ThreeDotsIcon
+              className={`transition ${showMenu && 'rotate-90'}`}
+            />
             {showMenu && (
               <div className='absolute flex flex-col gap-6 bg-white  p-4 rounded-xl top-12 right-4 w-48 shadow-md'>
                 <span
-                  className='text-slate cursor-pointer'
+                  className='flex justify-between items-center text-slate cursor-pointer'
                   onClick={() => handleEdit()}
                 >
                   Edit Board
+                  <EditIcon className='fill-white stroke-slate w-6 h-6' />
                 </span>
                 <span
-                  className='text-red-600 cursor-pointer'
+                  className='flex justify-between items-center text-red-600 cursor-pointer'
                   onClick={() => handleDelete()}
                 >
                   Delete Board
+                  <CrossIcon className='stroke-red-600 w-6 h-6' />
+                </span>
+                <span
+                  className='flex justify-between items-center text-red-600 cursor-pointer'
+                  onClick={() =>
+                    signOut({
+                      callbackUrl: `${window.location.origin}`,
+                    })
+                  }
+                >
+                  Sign Out
+                  <SignOutIcon className='fill-transparent stroke-red-600 w-6 h-6' />
                 </span>
               </div>
             )}
