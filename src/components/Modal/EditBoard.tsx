@@ -56,7 +56,7 @@ const EditBoard = () => {
       <div className='flex justify-between items-center w-full'>
         <h2 className=''>Edit Board</h2>
         <span onClick={() => store.toggleEditBoardModal()}>
-          <CrossIcon />
+          <CrossIcon className='stroke-red-600 w-6 h-6' />
         </span>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-6 w-full'>
@@ -109,7 +109,7 @@ const EditBoard = () => {
                   }`}
                 />
                 <button type='button' onClick={() => remove(index)}>
-                  <CrossIcon />
+                  <CrossIcon className='stroke-red-600 w-6 h-6' />
                 </button>
                 {errors?.columns?.[index] && (
                   <span className='absolute top-4 right-10 text-red-600 text-body-sm'>

@@ -57,7 +57,7 @@ const AddBoard = () => {
       <div className='flex justify-between items-center w-full'>
         <h2 className=''>Add New Board</h2>
         <span onClick={() => store.toggleAddBoardModal()}>
-          <CrossIcon />
+          <CrossIcon className='stroke-red-600 w-6 h-6' />
         </span>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-6 w-full'>
@@ -115,7 +115,7 @@ const AddBoard = () => {
                   defaultValue={field.id}
                 />
                 <button type='button' onClick={() => remove(index)}>
-                  <CrossIcon />
+                  <CrossIcon className='stroke-red-600 w-6 h-6' />
                 </button>
                 {errors?.columns?.[index] && (
                   <span className='absolute top-4 right-10 text-red-600 text-body-sm'>
