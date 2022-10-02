@@ -77,7 +77,8 @@ model Task {
   id          String    @id @default(cuid())
   title       String
   description String
-  columnId    String    @unique
+  completed   Boolean   @default(false)
+  columnId    String
   subtasks    Subtask[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -87,7 +88,8 @@ model Task {
 model Subtask {
   id        String   @id @default(cuid())
   title     String
-  taskId    String   @unique
+  completed Boolean  @default(false)
+  taskId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
