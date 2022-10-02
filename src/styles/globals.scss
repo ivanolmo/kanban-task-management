@@ -30,6 +30,11 @@
   h4 {
     @apply text-sm font-bold tracking-widest;
   }
+
+  input,
+  textarea {
+    @apply text-body-lg;
+  }
 }
 
 @layer components {
