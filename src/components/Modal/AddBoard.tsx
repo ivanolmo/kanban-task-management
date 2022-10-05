@@ -45,7 +45,7 @@ const AddBoard = () => {
   const onSubmit = (data: CreateBoardInput) => {
     // remove columns with no name
     data = {
-      boardName: data.boardName,
+      ...data,
       columns: data.columns.filter((column) => column.columnName !== ''),
     };
 
@@ -75,7 +75,7 @@ const AddBoard = () => {
             placeholder='e.g. Web Design'
             name='boardName'
             maxLength={20}
-            className={`block w-full border border-slate/25 rounded-md p-4 ${
+            className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
               errors?.boardName && 'border-red-600'
             }`}
           />
@@ -104,7 +104,7 @@ const AddBoard = () => {
                     <input
                       {...field}
                       placeholder='e.g. Todo, Doing, Done'
-                      className={`block w-full border border-slate/25 rounded-md p-4 ${
+                      className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
                         errors?.columns?.[index] && 'border-red-600'
                       }`}
                     />

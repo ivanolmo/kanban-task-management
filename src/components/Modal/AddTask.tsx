@@ -73,12 +73,12 @@ const AddTask: React.FC = () => {
             placeholder='e.g. Take coffee break'
             name='title'
             maxLength={20}
-            className={`block w-full border border-slate/25 rounded-md p-4 ${
+            className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
               errors?.title && 'border-red-600'
             }`}
           />
           {errors.title && errors.title.type === 'required' && (
-            <span className='absolute top-10 right-4 text-red-600 text-body-sm'>
+            <span className='absolute top-8 right-4 text-red-600 text-body-lg'>
               Can&apos;t be empty
             </span>
           )}
@@ -98,12 +98,12 @@ const AddTask: React.FC = () => {
             })}
             name='description'
             placeholder="e.g. It's always good to take a break. This 15 minute break will rechage the batteries a little."
-            className={`w-full border border-slate/25 rounded-md p-4 resize-none h-28 ${
+            className={`w-full border border-slate/25 rounded-md px-4 py-2 resize-none h-28 ${
               errors?.description && 'border-red-600'
             }`}
           ></textarea>
           {errors.description && errors.description.type === 'required' && (
-            <span className='absolute bottom-4 right-4 text-red-600 text-body-sm'>
+            <span className='absolute bottom-2 right-4 text-red-600 text-body-lg'>
               Can&apos;t be empty
             </span>
           )}
@@ -133,7 +133,7 @@ const AddTask: React.FC = () => {
                           ? 'e.g. Make more coffee!'
                           : 'e.g. Drink coffee and feel happy'
                       }
-                      className={`block w-full border border-slate/25 rounded-md p-4 ${
+                      className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
                         errors?.subtasks?.[index] && 'border-red-600'
                       }`}
                     />
@@ -147,7 +147,7 @@ const AddTask: React.FC = () => {
                   <CrossIcon className='stroke-red-600 w-6 h-6' />
                 </button>
                 {errors?.subtasks?.[index] && (
-                  <span className='absolute top-4 right-10 text-red-600 text-body-sm'>
+                  <span className='absolute top-2 right-12 text-red-600 text-body-lg'>
                     Can&apos;t be empty
                   </span>
                 )}

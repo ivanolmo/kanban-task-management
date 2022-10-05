@@ -55,9 +55,9 @@ const EditBoard = () => {
     <div className='space-y-6 w-full'>
       <div className='flex justify-between items-center w-full'>
         <h2 className=''>Edit Board</h2>
-        <span onClick={() => store.toggleEditBoardModal()}>
+        <button onClick={() => store.toggleEditBoardModal()}>
           <CrossIcon className='stroke-red-600 w-6 h-6' />
-        </span>
+        </button>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-6 w-full'>
         <div className='relative flex flex-col gap-2'>
@@ -74,7 +74,7 @@ const EditBoard = () => {
             placeholder='e.g. Web Design'
             name='boardName'
             maxLength={20}
-            className={`block w-full border border-slate/25 rounded-md p-4 ${
+            className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
               errors?.boardName && 'border-red-600'
             }`}
           />
@@ -104,7 +104,7 @@ const EditBoard = () => {
                     required: true,
                   })}
                   placeholder='e.g. Todo, Doing, Done'
-                  className={`block w-full border border-slate/25 rounded-md p-4 ${
+                  className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
                     errors?.columns?.[index] && 'border-red-600'
                   }`}
                 />
