@@ -1,10 +1,23 @@
-// props will be the task title and total number of subtasks
-const ColumnItem = () => {
+import type { Task } from 'src/types/boardTypes';
+
+type ColumnItemProps = {
+  task: Task;
+};
+
+const ColumnItem = (props: ColumnItemProps): JSX.Element => {
+  const completedSubtasks = props.task?.subtasks?.filter(
+    (subtask: { completed: boolean }) => subtask.completed === true
+  ).length;
+
   return (
-    <div className='flex flex-col gap-4 px-6 py-4 rounded-lg bg-white shadow-md'>
-      <h3>Build UI for onboarding flow</h3>
-      <span className='text-slate text-body-md'>0 of 3 subtasks</span>
-    </div>
+    <li className='flex flex-col gap-2 px-6 py-4 rounded-lg bg-white shadow-md'>
+      <h3>{props.task?.title}</h3>
+      <span className='text-slate text-body-md'>
+        {props.task?.subtasks?.length > 0
+          ? `${completedSubtasks} of ${props.task?.subtasks?.length} subtasks`
+          : 'No subtasks'}
+      </span>
+    </li>
   );
 };
 
