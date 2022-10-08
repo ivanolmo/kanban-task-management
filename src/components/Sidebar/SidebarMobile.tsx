@@ -57,7 +57,9 @@ const SidebarMobile = (props: SidebarMobileProps) => {
         </h2>
         <div className='mt-1 cursor-pointer'>
           <ChevronDownIcon
-            className={`transition ${store.showMobileSidebar && 'rotate-180'}`}
+            className={`stroke-violet-700 transition ${
+              store.showMobileSidebar && 'rotate-180'
+            }`}
           />
         </div>
       </div>

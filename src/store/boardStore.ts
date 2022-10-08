@@ -13,6 +13,8 @@ interface BoardStore {
   toggleEditBoardModal: () => void;
   showDeleteBoardModal: boolean;
   toggleDeleteBoardModal: () => void;
+  showAddTaskModal: boolean;
+  toggleAddTaskModal: () => void;
 }
 
 const useStore = create<BoardStore>((set) => ({
@@ -37,6 +39,11 @@ const useStore = create<BoardStore>((set) => ({
   toggleDeleteBoardModal: () =>
     set((state: { showDeleteBoardModal: boolean }) => ({
       showDeleteBoardModal: !state.showDeleteBoardModal,
+    })),
+  showAddTaskModal: false,
+  toggleAddTaskModal: () =>
+    set((state: { showAddTaskModal: boolean }) => ({
+      showAddTaskModal: !state.showAddTaskModal,
     })),
 }));
 

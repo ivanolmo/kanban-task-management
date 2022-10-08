@@ -89,24 +89,18 @@ export const boardRouter = createProtectedRouter()
           createdAt: 'asc',
         },
         include: {
-          columns: true,
+          columns: {
+            include: {
+              tasks: {
+                include: {
+                  subtasks: true,
+                },
+              },
+            },
+          },
         },
       });
 
       return boards;
-    },
-  })
-  .query('get-board-names', {
-    resolve: async ({ ctx }) => {
-      const boardNames = await ctx.prisma.board.findMany({
-        where: {
-          userId: ctx?.session?.user?.id,
-        },
-        select: {
-          boardName: true,
-        },
-      });
-
-      return boardNames;
     },
   });
