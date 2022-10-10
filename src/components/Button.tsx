@@ -1,4 +1,4 @@
-interface Props {
+type ButtonProps = {
   children: React.ReactNode;
   onClick?: () => void;
   type?: 'button' | 'submit';
@@ -7,9 +7,9 @@ interface Props {
   disabled?: boolean;
   hidden?: boolean;
   wide?: boolean;
-}
+};
 
-const Button: React.FC<Props> = ({
+const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
   type = 'button',

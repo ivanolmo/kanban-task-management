@@ -2,7 +2,7 @@ import create from 'zustand';
 
 import { Board } from 'src/types/boardTypes';
 
-interface BoardStore {
+type BoardStore = {
   selectedBoard: Board | null;
   setSelectedBoard: (board: Board) => void;
   showMobileSidebar: boolean;
@@ -15,7 +15,7 @@ interface BoardStore {
   toggleDeleteBoardModal: () => void;
   showAddTaskModal: boolean;
   toggleAddTaskModal: () => void;
-}
+};
 
 const useStore = create<BoardStore>((set) => ({
   selectedBoard: null,
