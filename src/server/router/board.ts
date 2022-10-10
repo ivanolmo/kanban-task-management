@@ -25,7 +25,7 @@ export const boardRouter = createProtectedRouter()
   .mutation('create-board', {
     input: createBoardSchema,
     resolve: async ({ ctx, input }) => {
-      const board = await ctx.prisma.board.create({
+      const createBoard = await ctx.prisma.board.create({
         data: {
           boardName: input.boardName,
           columns: {
@@ -43,40 +43,56 @@ export const boardRouter = createProtectedRouter()
         },
       });
 
-      return board;
+      return createBoard;
     },
   })
   .mutation('edit-board', {
     input: editBoardSchema,
     resolve: async ({ ctx, input }) => {
-      const board = await ctx.prisma.board.update({
+      // get existing columns from db
+      const existingColumns = await ctx.prisma.column.findMany({
         where: {
-          id: input.id,
+          boardId: input.id,
         },
-        data: {
-          boardName: input.boardName,
-          columns: {
-            createMany: {
-              data: input.columns.map((column) => ({
-                columnName: column.columnName,
-              })),
-            },
+      });
+
+      // filter existing columns out of the input from client
+      const filteredColumns = input.columns.filter(
+        (column) =>
+          !existingColumns.find((c) => c.columnName === column.columnName)
+      );
+
+      // delete columns removed from edit modal
+      const deletedColumns = await ctx.prisma.column.deleteMany({
+        where: {
+          boardId: input.id,
+          columnName: {
+            notIn: input.columns.map((column) => column.columnName),
           },
         },
       });
 
-      return board;
+      // create columns added to edit modal
+      const createdColumns = await ctx.prisma.column.createMany({
+        data: filteredColumns.map((column) => ({
+          columnName: column.columnName,
+          boardId: input.id,
+        })),
+      });
+
+      return { deletedColumns, createdColumns };
     },
   })
   .mutation('delete-board', {
     input: z.string(),
     resolve: async ({ ctx, input }) => {
-      const board = await ctx.prisma.board.delete({
+      const deleteBoard = await ctx.prisma.board.delete({
         where: {
           id: input,
         },
       });
-      return board;
+
+      return deleteBoard;
     },
   })
   .query('get-boards', {
@@ -90,6 +106,9 @@ export const boardRouter = createProtectedRouter()
         },
         include: {
           columns: {
+            orderBy: {
+              createdAt: 'asc',
+            },
             include: {
               tasks: {
                 include: {
