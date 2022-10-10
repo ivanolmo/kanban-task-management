@@ -44,7 +44,12 @@ const EditBoard = () => {
   });
 
   const onSubmit = (data: EditBoardInput) => {
-    mutate(data);
+    const uniqueColumns = data.columns.filter(
+      (column, index, self) =>
+        index === self.findIndex((t) => t.columnName === column.columnName)
+    );
+
+    mutate({ ...data, columns: uniqueColumns });
   };
 
   useEffect(() => {
@@ -103,6 +108,7 @@ const EditBoard = () => {
                   {...register(`columns.${index}.columnName`, {
                     required: true,
                   })}
+                  disabled={field.columnName !== ''}
                   placeholder='e.g. Todo, Doing, Done'
                   className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
                     errors?.columns?.[index] && 'border-red-600'
