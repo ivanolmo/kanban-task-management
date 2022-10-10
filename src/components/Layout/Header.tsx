@@ -65,11 +65,7 @@ const Header = (props: HeaderProps) => {
             <span className='hidden md:inline'>Add New Task</span>
           </Button>
           <div
-            className={`relative px-4 cursor-pointer ${
-              !store.selectedBoard?.columns
-                ? 'cursor-not-allowed opacity-25'
-                : 'cursor-pointer'
-            }`}
+            className='relative px-4 cursor-pointer'
             onClick={() => toggleMenu()}
           >
             <ThreeDotsIcon
@@ -78,14 +74,18 @@ const Header = (props: HeaderProps) => {
             {showMenu && (
               <div className='absolute flex flex-col gap-6 bg-white  p-4 rounded-xl top-12 right-4 w-48 shadow-md'>
                 <span
-                  className='flex justify-between items-center text-slate cursor-pointer'
+                  className={`flex justify-between items-center text-slate cursor-pointer ${
+                    !props.boards?.length && 'hidden'
+                  }`}
                   onClick={() => handleEdit()}
                 >
                   Edit Board
                   <EditIcon className='fill-white stroke-slate w-6 h-6' />
                 </span>
                 <span
-                  className='flex justify-between items-center text-red-600 cursor-pointer'
+                  className={`flex justify-between items-center text-red-600 cursor-pointer ${
+                    !props.boards?.length && 'hidden'
+                  }`}
                   onClick={() => handleDelete()}
                 >
                   Delete Board
