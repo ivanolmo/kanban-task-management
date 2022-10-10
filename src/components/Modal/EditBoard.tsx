@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-// import { useQueryClient } from 'react-query';
 
 import useStore from 'src/store/boardStore';
 import { trpc } from '@/utils/trpc';
@@ -11,15 +10,15 @@ import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 import type { EditBoardInput } from '@/server/router/board';
 
 const EditBoard = () => {
-  const store = useStore();
+  const [columnsToDelete, setColumnsToDelete] = useState<string[]>([]);
 
-  // const queryClient = useQueryClient();
+  const store = useStore();
+  const trpcCtx = trpc.useContext();
+
   const { mutate, error, isLoading } = trpc.useMutation(['boards.edit-board'], {
     onSuccess: () => {
+      trpcCtx.invalidateQueries(['boards.get-boards']);
       store.toggleEditBoardModal();
-      console.log('edit success');
-      // TODO check this
-      // queryClient.invalidateQueries('columns.get-columns');
     },
   });
 
@@ -49,12 +48,19 @@ const EditBoard = () => {
         index === self.findIndex((t) => t.columnName === column.columnName)
     );
 
-    mutate({ ...data, columns: uniqueColumns });
+    mutate({
+      ...data,
+      columns: uniqueColumns,
+    });
   };
 
   useEffect(() => {
     reset(store.selectedBoard as EditBoardInput);
   }, [reset, store.selectedBoard]);
+
+  if (error) return <p>Error</p>;
+
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className='space-y-6 w-full'>
@@ -64,6 +70,20 @@ const EditBoard = () => {
           <CrossIcon className='stroke-red-600 w-6 h-6' />
         </button>
       </div>
+      {columnsToDelete.length > 0 && (
+        <div className='space-y-4 text-body-lg text-red-600'>
+          <span>
+            <span className='uppercase'>Warning!</span> This action will delete
+            the following column{columnsToDelete.length > 1 && 's'} and all
+            associated tasks:
+          </span>
+          <ul>
+            {columnsToDelete.map((column) => (
+              <li key={column}>{column}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-6 w-full'>
         <div className='relative flex flex-col gap-2'>
           <label
@@ -114,7 +134,16 @@ const EditBoard = () => {
                     errors?.columns?.[index] && 'border-red-600'
                   }`}
                 />
-                <button type='button' onClick={() => remove(index)}>
+                <button
+                  type='button'
+                  onClick={() => {
+                    remove(index);
+                    setColumnsToDelete((columns) => [
+                      ...columns,
+                      field.columnName,
+                    ]);
+                  }}
+                >
                   <CrossIcon className='stroke-red-600 w-6 h-6' />
                 </button>
                 {errors?.columns?.[index] && (
