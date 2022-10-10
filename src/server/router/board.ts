@@ -49,6 +49,16 @@ export const boardRouter = createProtectedRouter()
   .mutation('edit-board', {
     input: editBoardSchema,
     resolve: async ({ ctx, input }) => {
+      // update board name
+      const boardName = await ctx.prisma.board.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          boardName: input.boardName,
+        },
+      });
+
       // get existing columns from db
       const existingColumns = await ctx.prisma.column.findMany({
         where: {
@@ -80,7 +90,7 @@ export const boardRouter = createProtectedRouter()
         })),
       });
 
-      return { deletedColumns, createdColumns };
+      return { boardName, deletedColumns, createdColumns };
     },
   })
   .mutation('delete-board', {
