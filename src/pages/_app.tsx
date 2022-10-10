@@ -6,9 +6,10 @@ import { loggerLink } from '@trpc/client/links/loggerLink';
 import { withTRPC } from '@trpc/next';
 import superjson from 'superjson';
 
-import type { AppRouter } from '@/server/router/app';
 import { getBaseUrl } from '@/utils/getBaseUrl';
 import '../styles/globals.scss';
+
+import type { AppRouter } from '@/server/router/app';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (

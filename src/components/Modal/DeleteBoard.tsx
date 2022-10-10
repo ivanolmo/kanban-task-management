@@ -1,6 +1,6 @@
 import useStore from 'src/store/boardStore';
-import Button from '@/components/Button';
 import { trpc } from '@/utils/trpc';
+import Button from '@/components/Button';
 
 const DeleteBoard = () => {
   const store = useStore();
@@ -17,8 +17,6 @@ const DeleteBoard = () => {
   const handleDelete = () => {
     mutate(store.selectedBoard?.id as string);
   };
-
-  console.log('board name ', store.selectedBoard?.boardName);
 
   return (
     <div className='flex flex-col gap-6'>
