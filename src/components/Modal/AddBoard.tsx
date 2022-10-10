@@ -1,5 +1,4 @@
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
-// import { useQueryClient } from 'react-query';
 
 import useStore from 'src/store/boardStore';
 import { trpc } from '@/utils/trpc';
@@ -11,15 +10,14 @@ import type { CreateBoardInput } from '@/server/router/board';
 
 const AddBoard = () => {
   const store = useStore();
+  const trpcCtx = trpc.useContext();
 
-  // const queryClient = useQueryClient();
   const { mutate, error, isLoading } = trpc.useMutation(
     ['boards.create-board'],
     {
       onSuccess: () => {
+        trpcCtx.invalidateQueries(['boards.get-boards']);
         store.toggleAddBoardModal();
-        // TODO check this
-        // queryClient.invalidateQueries('boards.get-boards');
       },
     }
   );
@@ -51,6 +49,10 @@ const AddBoard = () => {
 
     mutate(data);
   };
+
+  if (error) return <p>Error</p>;
+
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className='space-y-6 w-full'>

@@ -11,9 +11,11 @@ import type { CreateTaskInput } from '@/server/router/task';
 
 const AddTask: React.FC = () => {
   const store = useStore();
+  const trpcCtx = trpc.useContext();
 
   const { mutate, error, isLoading } = trpc.useMutation(['tasks.add-task'], {
     onSuccess: () => {
+      trpcCtx.invalidateQueries(['boards.get-boards']);
       store.toggleAddTaskModal();
     },
   });
@@ -49,6 +51,10 @@ const AddTask: React.FC = () => {
 
     mutate(data);
   };
+
+  if (error) return <p>Error</p>;
+
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className='space-y-6 w-full'>
