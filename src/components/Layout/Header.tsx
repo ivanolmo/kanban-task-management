@@ -14,8 +14,7 @@ import LogoDark from '@/assets/logo-dark.svg';
 import type { Board } from 'src/types/boardTypes';
 
 type HeaderProps = {
-  // boards: Board[];
-  boards: any[] | undefined;
+  boards: Board[] | undefined;
   sidebarVisible: boolean;
 };
 
@@ -49,7 +48,7 @@ const Header = (props: HeaderProps) => {
       </div>
       <div className='flex flex-1 justify-between items-center w-full pl-4 md:pl-6 md:pr-2'>
         <SidebarMobile
-          // TODO only needs length not all board data
+          // TODO only needs names not all board data?
           boards={props.boards}
         />
         <h2 className='hidden md:block capitalize'>
@@ -60,6 +59,7 @@ const Header = (props: HeaderProps) => {
             variant='primary'
             size='rg'
             disabled={!store.selectedBoard?.columns}
+            onClick={() => store.toggleAddTaskModal()}
           >
             <PlusIcon className='fill-white' />
             <span className='hidden md:inline'>Add New Task</span>

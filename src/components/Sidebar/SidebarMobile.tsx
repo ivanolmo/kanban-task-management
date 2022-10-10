@@ -42,11 +42,13 @@ const SidebarMobile = (props: SidebarMobileProps) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [store]);
 
   return (
     <div className='md:hidden flex items-center gap-4 w-fit cursor-pointer'>
-      <LogoMobile className='' />
+      <div>
+        <LogoMobile />
+      </div>
       <div
         className='flex items-center gap-2'
         onClick={() => store.toggleMobileSidebar()}
