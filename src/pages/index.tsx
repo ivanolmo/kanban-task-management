@@ -1,21 +1,23 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext, NextPage } from 'next';
-import { useSession, signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
 import useStore from 'src/store/boardStore';
 import { trpc } from '@/utils/trpc';
+import { getKanbanServerAuthSession } from '@/server/common/get-server-session';
 import Button from '@/components/Button';
+import AddColumn from '@/components/Column/AddColumn';
 import ColumnComp from '@/components/Column/ColumnComp';
 import Header from '@/components/Layout/Header';
 import AddBoard from '@/components/Modal/AddBoard';
+import AddTask from '@/components/Modal/AddTask';
 import DeleteBoard from '@/components/Modal/DeleteBoard';
 import EditBoard from '@/components/Modal/EditBoard';
 import ModalContainer from '@/components/Modal/ModalContainer';
 import SidebarComp from '@/components/Sidebar/SidebarComp';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 import ShowSidebarIcon from '@/assets/icon-show-sidebar.svg';
-import { getKanbanServerAuthSession } from '@/server/common/get-server-session';
 
 import type { Board, Column } from 'src/types/boardTypes';
 
@@ -25,12 +27,10 @@ const Home: NextPage = () => {
   const session = useSession();
   const store = useStore();
 
-  // TODO check refetch after mutate
   const {
     data: boards,
     isLoading,
     isError,
-    isSuccess,
   } = trpc.useQuery(['boards.get-boards'], {
     enabled: !!session?.data?.user,
     // refetchOnWindowFocus: false,
@@ -65,12 +65,12 @@ const Home: NextPage = () => {
     );
   }
 
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
-
   if (isError) {
     return <div>Error</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading</div>;
   }
 
   return (
@@ -95,6 +95,8 @@ const Home: NextPage = () => {
             {store.selectedBoard?.columns?.map((column: Column) => (
               <ColumnComp key={column.id} column={column} />
             ))}
+            {store.selectedBoard &&
+              store.selectedBoard?.columns?.length > 0 && <AddColumn />}
           </ScrollContainer>
           <section className='flex flex-col items-center gap-6 flex-1 max-w-xs m-auto'>
             {boards?.length === 0 && (
@@ -151,6 +153,11 @@ const Home: NextPage = () => {
         {store.showEditBoardModal && (
           <ModalContainer>
             <EditBoard />
+          </ModalContainer>
+        )}
+        {store.showAddTaskModal && (
+          <ModalContainer>
+            <AddTask />
           </ModalContainer>
         )}
       </main>
