@@ -4,11 +4,13 @@ import Button from '@/components/Button';
 
 const DeleteBoard = () => {
   const store = useStore();
+  const trpcCtx = trpc.useContext();
 
   const { mutate, error, isLoading } = trpc.useMutation(
     ['boards.delete-board'],
     {
       onSuccess: () => {
+        trpcCtx.invalidateQueries(['boards.get-boards']);
         store.toggleDeleteBoardModal();
       },
     }
@@ -17,6 +19,10 @@ const DeleteBoard = () => {
   const handleDelete = () => {
     mutate(store.selectedBoard?.id as string);
   };
+
+  if (error) return <p>Error</p>;
+
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className='flex flex-col gap-6'>
