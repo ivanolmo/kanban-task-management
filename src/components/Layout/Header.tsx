@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { signOut } from 'next-auth/react';
 
 import useStore from 'src/store/boardStore';
@@ -20,12 +20,14 @@ type HeaderProps = {
 
 const Header = (props: HeaderProps) => {
   const [showMenu, setShowMenu] = useState(false);
+  const submenuRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLDivElement | null>(null);
 
   const store = useStore();
 
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setShowMenu(!showMenu);
-  };
+  }, [showMenu]);
 
   const handleDelete = () => {
     store.toggleDeleteBoardModal();
@@ -36,6 +38,25 @@ const Header = (props: HeaderProps) => {
     store.toggleEditBoardModal();
     toggleMenu();
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        submenuRef.current &&
+        buttonRef.current &&
+        !submenuRef.current.contains(e.target as Node) &&
+        !buttonRef?.current?.contains(e.target as Node)
+      ) {
+        toggleMenu();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [toggleMenu]);
 
   return (
     <header className='flex items-center h-16 bg-white'>
@@ -55,24 +76,31 @@ const Header = (props: HeaderProps) => {
           {store.selectedBoard?.boardName ?? 'No Boards'}
         </h2>
         <div className='flex items-center gap-1 md:gap-2.5'>
-          <Button
-            variant='primary'
-            size='rg'
-            disabled={!store.selectedBoard?.columns}
-            onClick={() => store.toggleAddTaskModal()}
-          >
-            <PlusIcon className='fill-white' />
-            <span className='hidden md:inline'>Add New Task</span>
-          </Button>
+          <div>
+            <Button
+              variant='primary'
+              size='rg'
+              disabled={!store.selectedBoard?.columns}
+              onClick={() => store.toggleAddTaskModal()}
+            >
+              <PlusIcon className='fill-white' />
+              <span className='hidden md:inline'>Add New Task</span>
+            </Button>
+          </div>
           <div
             className='relative px-4 cursor-pointer'
             onClick={() => toggleMenu()}
           >
-            <ThreeDotsIcon
-              className={`transition ${showMenu && 'rotate-90'}`}
-            />
+            <div ref={buttonRef}>
+              <ThreeDotsIcon
+                className={`transition ${showMenu && 'rotate-90'}`}
+              />
+            </div>
             {showMenu && (
-              <div className='absolute flex flex-col gap-6 bg-white  p-4 rounded-xl top-12 right-4 w-48 shadow-md'>
+              <div
+                className='absolute flex flex-col gap-6 bg-white  p-4 rounded-xl top-12 right-4 w-48 shadow-md'
+                ref={submenuRef}
+              >
                 <span
                   className={`flex justify-between items-center text-slate cursor-pointer ${
                     !props.boards?.length && 'hidden'
