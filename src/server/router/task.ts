@@ -44,4 +44,22 @@ export const taskRouter = createProtectedRouter()
 
       return task;
     },
+  })
+  .mutation('complete-subtask', {
+    input: z.object({
+      taskId: z.string(),
+      subtaskId: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      const subtask = await ctx.prisma.subtask.update({
+        where: {
+          id: input.subtaskId,
+        },
+        data: {
+          completed: true,
+        },
+      });
+
+      return subtask;
+    },
   });
