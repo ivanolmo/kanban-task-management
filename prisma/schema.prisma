@@ -3,22 +3,22 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(cuid()) @map("_id")
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -27,7 +27,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(cuid()) @map("_id")
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -35,7 +35,7 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(cuid()) @map("_id")
   name          String?
   email         String?   @unique
   emailVerified DateTime?
@@ -46,6 +46,7 @@ model User {
 }
 
 model VerificationToken {
+  id         String   @id @default(cuid()) @map("_id")
   identifier String
   token      String   @unique
   expires    DateTime
@@ -54,7 +55,7 @@ model VerificationToken {
 }
 
 model Board {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @map("_id")
   boardName String
   columns   Column[]
   createdAt DateTime @default(now())
@@ -64,7 +65,7 @@ model Board {
 }
 
 model Column {
-  id         String   @id @default(cuid())
+  id         String   @id @default(cuid()) @map("_id")
   columnName String
   boardId    String
   tasks      Task[]
@@ -74,7 +75,7 @@ model Column {
 }
 
 model Task {
-  id          String    @id @default(cuid())
+  id          String    @id @default(cuid()) @map("_id")
   title       String
   description String
   completed   Boolean   @default(false)
@@ -86,7 +87,7 @@ model Task {
 }
 
 model Subtask {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @map("_id")
   title     String
   completed Boolean  @default(false)
   taskId    String
