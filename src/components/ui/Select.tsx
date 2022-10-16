@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import type { FieldValues } from 'react-hook-form';
 
@@ -10,6 +10,11 @@ const Select = (props: { field: FieldValues }) => {
   const store = useStore();
 
   const { onChange, value } = props.field;
+
+  // set default select value to todo
+  useEffect(() => {
+    onChange(store.selectedBoard?.columns[0]);
+  }, [onChange, store.selectedBoard?.columns]);
 
   return (
     <Listbox value={value} onChange={onChange}>

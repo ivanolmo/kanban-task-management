@@ -35,7 +35,15 @@ const ViewTask: React.FC = () => {
   const {
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      columnId: {},
+      title: '',
+      description: '',
+      subtasks: [{ title: '' }, { title: '' }],
+    },
+    mode: 'onBlur',
+  });
 
   const handleDelete = () => {
     store.toggleViewTaskModal();
