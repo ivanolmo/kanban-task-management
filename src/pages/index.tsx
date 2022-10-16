@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import type { GetServerSidePropsContext, NextPage } from 'next';
+import type { NextPage } from 'next';
+import Image from 'next/image';
 import { signIn, useSession } from 'next-auth/react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
 import useStore from 'src/store/boardStore';
 import { trpc } from '@/utils/trpc';
-import { getKanbanServerAuthSession } from '@/server/common/get-server-session';
 import Button from '@/components/Button';
 import AddColumn from '@/components/Column/AddColumn';
 import ColumnComp from '@/components/Column/ColumnComp';
@@ -15,6 +15,8 @@ import AddTask from '@/components/Modal/AddTask';
 import DeleteBoard from '@/components/Modal/DeleteBoard';
 import EditBoard from '@/components/Modal/EditBoard';
 import ModalContainer from '@/components/Modal/ModalContainer';
+import DeleteTask from '@/components/Modal/DeleteTask';
+import ViewTask from '@/components/Modal/ViewTask';
 import SidebarComp from '@/components/Sidebar/SidebarComp';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 import ShowSidebarIcon from '@/assets/icon-show-sidebar.svg';
@@ -34,7 +36,7 @@ const Home: NextPage = () => {
   } = trpc.useQuery(['boards.get-boards'], {
     enabled: !!session?.data?.user,
     // refetchOnWindowFocus: false,
-    onSuccess: (data) => {
+    onSuccess: (data: Board[]) => {
       store.setSelectedBoard(data[0] as Board);
     },
   });
@@ -57,9 +59,20 @@ const Home: NextPage = () => {
   if (!session.data) {
     return (
       <div className='grid h-screen'>
-        <div className='place-self-center flex flex-col items-center gap-8'>
-          <span>You must be signed in to use this application!</span>
-          <Button onClick={() => signIn()}>Sign in</Button>
+        <div className='place-self-center flex flex-col items-center gap-16'>
+          <div>
+            <Image
+              src='/assets/logo-main.webp'
+              alt='logo'
+              width={192}
+              height={192}
+              priority
+            />
+          </div>
+          <div className='flex flex-col items-center gap-6'>
+            <span>You must be signed in to use this application!</span>
+            <Button onClick={() => signIn()}>Sign in</Button>
+          </div>
         </div>
       </div>
     );
@@ -160,17 +173,19 @@ const Home: NextPage = () => {
             <AddTask />
           </ModalContainer>
         )}
+        {store.showViewTaskModal && (
+          <ModalContainer>
+            <ViewTask />
+          </ModalContainer>
+        )}
+        {store.showDeleteTaskModal && (
+          <ModalContainer>
+            <DeleteTask />
+          </ModalContainer>
+        )}
       </main>
     </>
   );
 };
 
 export default Home;
-
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  return {
-    props: {
-      session: await getKanbanServerAuthSession(ctx),
-    },
-  };
-};
