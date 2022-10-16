@@ -62,4 +62,34 @@ export const taskRouter = createProtectedRouter()
 
       return subtask;
     },
+  })
+  .mutation('move-task-column', {
+    input: z.object({
+      taskId: z.string(),
+      columnId: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      const task = await ctx.prisma.task.update({
+        where: {
+          id: input.taskId,
+        },
+        data: {
+          columnId: input.columnId,
+        },
+      });
+
+      return task;
+    },
+  })
+  .mutation('get-task', {
+    input: z.string(),
+    resolve: async ({ ctx, input }) => {
+      const task = await ctx.prisma.task.findUnique({
+        where: {
+          id: input,
+        },
+      });
+
+      return task;
+    },
   });
