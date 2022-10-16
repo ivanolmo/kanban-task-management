@@ -75,10 +75,9 @@ const AddTask: React.FC = () => {
             Title
           </label>
           <input
-            {...register('title', { required: true, maxLength: 20 })}
+            {...register('title', { required: true })}
             placeholder='e.g. Take coffee break'
             name='title'
-            maxLength={20}
             className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
               errors?.title && 'border-red-600'
             }`}

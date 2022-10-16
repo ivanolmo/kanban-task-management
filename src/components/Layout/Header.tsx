@@ -1,17 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { signOut } from 'next-auth/react';
+import { useCallback, useState } from 'react';
 
 import useStore from 'src/store/boardStore';
 import Button from '@/components/Button';
 import SidebarMobile from '@/components/Sidebar/SidebarMobile';
-import CrossIcon from '@/assets/icon-cross.svg';
-import EditIcon from '@/assets/icon-edit.svg';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
-import SignOutIcon from '@/assets/icon-sign-out.svg';
-import ThreeDotsIcon from '@/assets/icon-vertical-ellipsis.svg';
 import LogoDark from '@/assets/logo-dark.svg';
 
 import type { Board } from 'src/types/boardTypes';
+import Submenu from '@/components/ui/Submenu';
 
 type HeaderProps = {
   boards: Board[] | undefined;
@@ -20,8 +16,6 @@ type HeaderProps = {
 
 const Header = (props: HeaderProps) => {
   const [showMenu, setShowMenu] = useState(false);
-  const submenuRef = useRef<HTMLDivElement | null>(null);
-  const buttonRef = useRef<HTMLDivElement | null>(null);
 
   const store = useStore();
 
@@ -38,25 +32,6 @@ const Header = (props: HeaderProps) => {
     store.toggleEditBoardModal();
     toggleMenu();
   };
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        submenuRef.current &&
-        buttonRef.current &&
-        !submenuRef.current.contains(e.target as Node) &&
-        !buttonRef?.current?.contains(e.target as Node)
-      ) {
-        toggleMenu();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [toggleMenu]);
 
   return (
     <header className='flex items-center h-16 bg-white'>
@@ -87,52 +62,14 @@ const Header = (props: HeaderProps) => {
               <span className='hidden md:inline'>Add New Task</span>
             </Button>
           </div>
-          <div
-            className='relative px-4 cursor-pointer'
-            onClick={() => toggleMenu()}
-          >
-            <div ref={buttonRef}>
-              <ThreeDotsIcon
-                className={`transition ${showMenu && 'rotate-90'}`}
-              />
-            </div>
-            {showMenu && (
-              <div
-                className='absolute flex flex-col gap-6 bg-white  p-4 rounded-xl top-12 right-4 w-48 shadow-md'
-                ref={submenuRef}
-              >
-                <span
-                  className={`flex justify-between items-center text-slate cursor-pointer ${
-                    !props.boards?.length && 'hidden'
-                  }`}
-                  onClick={() => handleEdit()}
-                >
-                  Edit Board
-                  <EditIcon className='fill-white stroke-slate w-6 h-6' />
-                </span>
-                <span
-                  className={`flex justify-between items-center text-red-600 cursor-pointer ${
-                    !props.boards?.length && 'hidden'
-                  }`}
-                  onClick={() => handleDelete()}
-                >
-                  Delete Board
-                  <CrossIcon className='stroke-red-600 w-6 h-6' />
-                </span>
-                <span
-                  className='flex justify-between items-center text-red-600 cursor-pointer'
-                  onClick={() =>
-                    signOut({
-                      callbackUrl: `${window.location.origin}`,
-                    })
-                  }
-                >
-                  Sign Out
-                  <SignOutIcon className='fill-transparent stroke-red-600 w-6 h-6' />
-                </span>
-              </div>
-            )}
-          </div>
+          <Submenu
+            boards={props.boards}
+            showMenu={showMenu}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+            toggleMenu={toggleMenu}
+            withSignOut
+          />
         </div>
       </div>
     </header>
