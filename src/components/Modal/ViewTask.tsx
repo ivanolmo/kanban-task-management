@@ -51,12 +51,12 @@ const ViewTask: React.FC = () => {
     store.toggleDeleteTaskModal();
   };
 
-  const handleColumnMove = (columnId: string) => {
-    mutate({
-      id: store.selectedTask?.id as string,
-      columnId,
-    });
-  };
+  // const handleColumnMove = (columnId: string) => {
+  //   mutate({
+  //     id: store.selectedTask?.id as string,
+  //     columnId,
+  //   });
+  // };
 
   const handleClose = () => {
     store.toggleViewTaskModal();
@@ -117,9 +117,7 @@ const ViewTask: React.FC = () => {
           <Controller
             name='columnId'
             control={control}
-            render={({ field }) => (
-              <Select field={field} handleColumnMove={handleColumnMove} />
-            )}
+            render={({ field }) => <Select field={field} />}
           />
         </div>
       </form>
