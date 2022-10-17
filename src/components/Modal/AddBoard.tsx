@@ -58,7 +58,10 @@ const AddBoard = () => {
     <div className='space-y-6 w-full'>
       <div className='flex justify-between items-center w-full'>
         <h2 className=''>Add New Board</h2>
-        <span onClick={() => store.toggleAddBoardModal()}>
+        <span
+          className='cursor-pointer'
+          onClick={() => store.toggleAddBoardModal()}
+        >
           <CrossIcon className='stroke-red-600 w-6 h-6' />
         </span>
       </div>
@@ -66,7 +69,7 @@ const AddBoard = () => {
         <div className='relative flex flex-col gap-2'>
           <label
             htmlFor='boardName'
-            className={`text-slate text-body-md ${
+            className={`text-slate dark:text-white text-body-md ${
               errors.boardName && 'text-red-600'
             }`}
           >
@@ -77,7 +80,7 @@ const AddBoard = () => {
             placeholder='e.g. Web Design'
             name='boardName'
             maxLength={20}
-            className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
+            className={`border-slate/25 ${
               errors?.boardName && 'border-red-600'
             }`}
           />
@@ -89,7 +92,7 @@ const AddBoard = () => {
         </div>
         <div className='flex flex-col gap-4 w-full'>
           <span
-            className={`text-slate text-body-md ${
+            className={`text-slate dark:text-white text-body-md ${
               errors?.columns && 'text-red-600'
             }`}
           >
@@ -106,7 +109,7 @@ const AddBoard = () => {
                     <input
                       {...field}
                       placeholder='e.g. Todo, Doing, Done'
-                      className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
+                      className={`border-slate/25 ${
                         errors?.columns?.[index] && 'border-red-600'
                       }`}
                     />

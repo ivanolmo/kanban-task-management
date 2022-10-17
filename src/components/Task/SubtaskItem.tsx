@@ -5,6 +5,7 @@ import { trpc } from '@/utils/trpc';
 import CheckIcon from '@/assets/icon-check.svg';
 
 import type { Subtask } from 'src/types/boardTypes';
+import clsx from 'clsx';
 
 type SubtaskItemProps = {
   key: string;
@@ -43,7 +44,7 @@ const SubtaskItem = (props: SubtaskItemProps): JSX.Element => {
 
   return (
     <li
-      className='pl-3 pr-6 py-4 bg-violet-50 hover:bg-violet-400/25 rounded-md flex items-center gap-4 group'
+      className='pl-3 pr-6 py-4 bg-violet-50 dark:bg-zinc hover:bg-violet-700/25 dark:hover:bg-violet-700/25 rounded-md flex items-center gap-4 cursor-pointer'
       onClick={() => handleClick()}
     >
       {completed ? (
@@ -51,13 +52,16 @@ const SubtaskItem = (props: SubtaskItemProps): JSX.Element => {
           <CheckIcon className='stroke-white' />
         </div>
       ) : (
-        <div className='flex justify-center items-center flex-shrink-0 w-4 h-4 rounded-sm bg-white border border-slate/25' />
+        <div className='flex justify-center items-center flex-shrink-0 w-4 h-4 rounded-sm bg-white dark:bg-gunmetal-800 border border-slate/25' />
       )}
 
       <span
-        className={`text-slate text-body-md group-hover:text-black ${
-          completed && 'line-through'
-        }`}
+        className={clsx(
+          'text-body-md',
+          completed
+            ? 'text-slate dark:text-white/50 line-through'
+            : 'text-black dark:text-white'
+        )}
       >
         {props.subtask?.title}
       </span>

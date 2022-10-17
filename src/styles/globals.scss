@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply relative h-full min-w-[375px] antialiased leading-tight bg-violet-50;
+    @apply relative h-full min-w-[375px] antialiased leading-tight bg-violet-50 dark:bg-zinc text-black dark:text-white transition-colors duration-300;
   }
 
   /* XL */
@@ -28,18 +28,22 @@
 
   /* S */
   h4 {
-    @apply text-sm font-bold tracking-widest;
+    @apply text-sm font-bold tracking-[2.4px];
+  }
+
+  textarea {
+    @apply resize-none h-28;
   }
 
   input,
   textarea {
-    @apply text-body-lg;
+    @apply text-body-lg px-4 py-2 rounded-md dark:bg-gunmetal-800 border hover:border-violet-700 dark:disabled:bg-zinc dark:disabled:text-white/25 w-full;
   }
 }
 
 @layer components {
   .btn {
-    @apply px-[1.125rem] font-bold rounded-full cursor-pointer;
+    @apply px-[1.125rem] md:px-6 font-bold rounded-full cursor-pointer;
   }
 
   /* sizes */
@@ -48,7 +52,7 @@
   }
 
   .lg {
-    @apply py-4;
+    @apply py-2.5 md:py-4;
   }
 
   .wide {
@@ -57,15 +61,15 @@
 
   /* variant/color */
   .primary {
-    @apply text-white bg-violet-700 hover:bg-violet-400;
+    @apply text-white bg-violet-700 hover:bg-violet-400 transition;
   }
 
   .secondary {
-    @apply text-violet-700 bg-violet-700/10 hover:bg-violet-700/25;
+    @apply text-violet-700 bg-violet-700/10 dark:bg-white hover:bg-violet-700/25 dark:hover:bg-indigo transition;
   }
 
   .delete {
-    @apply text-white bg-red-600 hover:bg-red-400;
+    @apply text-white bg-red-600 hover:bg-red-400 transition;
   }
 
   .disabled {
@@ -73,7 +77,7 @@
   }
 
   .no-bg {
-    @apply px-0 bg-transparent text-violet-700 hover:text-violet-400;
+    @apply px-0 bg-transparent text-violet-700 hover:text-violet-400 transition;
   }
 }
 
@@ -97,7 +101,7 @@
 
 .checkbox:checked {
   & + .theme-label {
-    @apply bg-violet-700 border-violet-700;
+    @apply bg-violet-700 hover:bg-violet-400 transition border-violet-700;
 
     &:before {
       animation-name: switch;

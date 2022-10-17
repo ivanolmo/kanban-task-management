@@ -6,7 +6,7 @@ const AddColumn = () => {
 
   return (
     <div
-      className='flex flex-col justify-center items-center flex-shrink-0 w-72 h-[40rem] mt-10 bg-indigo rounded-md shadow-md hover:shadow-xl transition-all group cursor-pointer'
+      className='flex flex-col justify-center items-center flex-shrink-0 w-72 h-[40rem] mt-10 bg-indigo dark:bg-gunmetal-800 rounded-md shadow-md hover:shadow-xl hover:scale-105 transition-all group cursor-pointer'
       onClick={() => store.toggleEditBoardModal()}
     >
       <div className='flex items-center gap-2'>

@@ -5,6 +5,7 @@ import Button from '@/components/Button';
 import SidebarMobile from '@/components/Sidebar/SidebarMobile';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 import LogoDark from '@/assets/logo-dark.svg';
+import LogoLight from '@/assets/logo-light.svg';
 
 import type { Board } from 'src/types/boardTypes';
 import Submenu from '@/components/ui/Submenu';
@@ -34,28 +35,33 @@ const Header = (props: HeaderProps) => {
   };
 
   return (
-    <header className='flex items-center h-16 bg-white'>
+    <header className='flex items-center h-16 md:h-20 lg:h-24 bg-white dark:bg-gunmetal-800'>
       <div
-        className={`hidden md:flex items-center h-full border-r border-indigo px-4 md:px-6 ${
+        className={`hidden md:flex items-center h-full border-r border-indigo dark:border-gunmetal-700 px-4 md:px-6 ${
           props.sidebarVisible && 'w-64'
         }`}
       >
-        <LogoDark className='hidden md:block' />
+        <span className='dark:hidden'>
+          <LogoDark className='hidden md:block' />
+        </span>
+        <span className='hidden dark:inline'>
+          <LogoLight className='hidden md:block' />
+        </span>
       </div>
       <div className='flex flex-1 justify-between items-center w-full pl-4 md:pl-6 md:pr-2'>
         <SidebarMobile
           // TODO only needs names not all board data?
           boards={props.boards}
         />
-        <h2 className='hidden md:block capitalize'>
+        <h1 className='hidden md:block capitalize'>
           {store.selectedBoard?.boardName ?? 'No Boards'}
-        </h2>
+        </h1>
         <div className='flex items-center gap-1 md:gap-2.5'>
           <div>
             <Button
               variant='primary'
-              size='rg'
-              disabled={!store.selectedBoard?.columns}
+              size='lg'
+              disabled={!store.selectedBoard?.columns.length}
               onClick={() => store.toggleAddTaskModal()}
             >
               <PlusIcon className='fill-white' />

@@ -54,30 +54,30 @@ const Submenu = (props: SubmenuProps) => {
       </div>
       {props.showMenu && (
         <div
-          className='absolute flex flex-col gap-6 bg-white  p-4 rounded-xl top-12 right-4 w-48 shadow-2xl'
+          className='absolute flex flex-col gap-6 bg-white dark:bg-zinc p-4 rounded-xl top-12 right-0 lg:right-1 w-48 shadow-x'
           ref={submenuRef}
         >
           <span
-            className={`flex justify-between items-center text-slate cursor-pointer ${
+            className={`flex justify-between items-center text-slate hover:text-gunmetal-700 dark:hover:text-white cursor-pointer group transition ${
               props.boards ? !props.boards?.length && 'hidden' : null
             }`}
             onClick={() => props.handleEdit()}
           >
             {`Edit ${props.boards ? 'Board' : 'Task'}`}
-            <EditIcon className='fill-white stroke-slate w-6 h-6' />
+            <EditIcon className='fill-white dark:fill-transparent stroke-slate group-hover:stroke-gunmetal-700 dark:group-hover:stroke-white w-6 h-6 transition' />
           </span>
           <span
-            className={`flex justify-between items-center text-red-600 cursor-pointer ${
+            className={`flex justify-between items-center text-red-600 hover:text-red-900 dark:hover:text-red-400 cursor-pointer group transition ${
               props.boards ? !props.boards?.length && 'hidden' : null
             }`}
             onClick={() => props.handleDelete()}
           >
             {`Delete ${props.boards ? 'Board' : 'Task'}`}
-            <CrossIcon className='stroke-red-600 w-6 h-6' />
+            <CrossIcon className='stroke-red-600 group-hover:stroke-red-900 dark:group-hover:stroke-red-400 w-6 h-6 transition' />
           </span>
           {props.withSignOut && (
             <span
-              className='flex justify-between items-center text-red-600 cursor-pointer'
+              className='flex justify-between items-center text-red-600 hover:text-red-900 dark:hover:text-red-400 cursor-pointer group transition'
               onClick={() =>
                 signOut({
                   callbackUrl: `${window.location.origin}`,
@@ -85,7 +85,7 @@ const Submenu = (props: SubmenuProps) => {
               }
             >
               Sign Out
-              <SignOutIcon className='fill-transparent stroke-red-600 w-6 h-6' />
+              <SignOutIcon className='fill-transparent stroke-red-600 group-hover:stroke-red-900 dark:group-hover:stroke-red-400 w-6 h-6 transition' />
             </span>
           )}
         </div>

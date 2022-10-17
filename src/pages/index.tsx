@@ -111,7 +111,7 @@ const Home: NextPage = () => {
             {store.selectedBoard &&
               store.selectedBoard?.columns?.length > 0 && <AddColumn />}
           </ScrollContainer>
-          <section className='flex flex-col items-center gap-6 flex-1 max-w-xs m-auto'>
+          <section className='flex flex-col items-center gap-6 flex-1 max-w-xs lg:max-w-lg m-auto'>
             {boards?.length === 0 && (
               <>
                 <h2 className='text-center text-slate'>
@@ -120,7 +120,7 @@ const Home: NextPage = () => {
                 </h2>
                 <Button
                   variant='primary'
-                  size='rg'
+                  size='lg'
                   onClick={() => store.toggleAddBoardModal()}
                 >
                   <PlusIcon className='fill-white' />
@@ -135,7 +135,7 @@ const Home: NextPage = () => {
                 </h2>
                 <Button
                   variant='primary'
-                  size='rg'
+                  size='lg'
                   onClick={() => store.toggleEditBoardModal()}
                 >
                   <PlusIcon className='fill-white' />
@@ -146,12 +146,12 @@ const Home: NextPage = () => {
           </section>
         </div>
         <div
-          className={`hidden absolute left-0 bottom-8 md:flex justify-center items-center bg-violet-700 p-5 rounded-r-full cursor-pointer ease-in-out duration-300 ${
+          className={`hidden absolute left-0 bottom-8 md:flex justify-center items-center bg-violet-700 hover:bg-violet-400 p-5 rounded-r-full cursor-pointer transition ${
             sidebarVisible ? '-translate-x-full' : 'translate-x-0'
           }`}
           onClick={() => toggleSidebar()}
         >
-          <ShowSidebarIcon className='' />
+          <ShowSidebarIcon />
         </div>
         {store.showAddBoardModal && (
           <ModalContainer>

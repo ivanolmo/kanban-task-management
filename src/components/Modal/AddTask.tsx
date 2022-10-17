@@ -68,7 +68,7 @@ const AddTask: React.FC = () => {
         <div className='relative flex flex-col gap-2'>
           <label
             htmlFor='title'
-            className={`text-slate text-body-md ${
+            className={`text-slate dark:text-white text-body-md ${
               errors.title && 'text-red-600'
             }`}
           >
@@ -78,9 +78,7 @@ const AddTask: React.FC = () => {
             {...register('title', { required: true })}
             placeholder='e.g. Take coffee break'
             name='title'
-            className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
-              errors?.title && 'border-red-600'
-            }`}
+            className={`border-slate/25 ${errors?.title && 'border-red-600'}`}
           />
           {errors.title && errors.title.type === 'required' && (
             <span className='absolute top-8 right-4 text-red-600 text-body-lg'>
@@ -91,7 +89,7 @@ const AddTask: React.FC = () => {
         <div className='relative flex flex-col gap-2'>
           <label
             htmlFor='description'
-            className={`text-slate text-body-md ${
+            className={`text-slate dark:text-white text-body-md ${
               errors.description && 'text-red-600'
             }`}
           >
@@ -103,7 +101,7 @@ const AddTask: React.FC = () => {
             })}
             name='description'
             placeholder="e.g. It's always good to take a break. This 15 minute break will rechage the batteries a little."
-            className={`w-full border border-slate/25 rounded-md px-4 py-2 resize-none h-28 ${
+            className={`border-slate/25 ${
               errors?.description && 'border-red-600'
             }`}
           ></textarea>
@@ -115,7 +113,7 @@ const AddTask: React.FC = () => {
         </div>
         <div className='flex flex-col gap-4 w-full'>
           <span
-            className={`text-slate text-body-md ${
+            className={`text-slate dark:text-white text-body-md ${
               errors?.subtasks && 'text-red-600'
             }`}
           >
@@ -138,7 +136,7 @@ const AddTask: React.FC = () => {
                           ? 'e.g. Make more coffee!'
                           : 'e.g. Drink coffee and feel happy'
                       }
-                      className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
+                      className={`border-slate/25 ${
                         errors?.subtasks?.[index] && 'border-red-600'
                       }`}
                     />
@@ -166,7 +164,7 @@ const AddTask: React.FC = () => {
         </Button>
         <div className='flex flex-col gap-4 w-full'>
           <span
-            className={`text-slate text-body-md ${
+            className={`text-slate dark:text-white text-body-md ${
               errors?.columnId && 'text-red-600'
             }`}
           >

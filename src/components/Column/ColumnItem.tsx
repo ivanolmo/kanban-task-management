@@ -20,7 +20,7 @@ const ColumnItem = (props: ColumnItemProps): JSX.Element => {
 
   return (
     <li
-      className='flex flex-col gap-2 px-6 py-4 rounded-lg bg-white shadow-md cursor-pointer hover:shadow-xl hover:scale-105 transition-all'
+      className='flex flex-col gap-2 px-6 py-4 rounded-lg bg-white dark:bg-gunmetal-800 shadow-md dark:shadow-xl cursor-pointer hover:scale-105 transition-all duration-300'
       onClick={() => handleSelect()}
     >
       <h3>{props.task?.title}</h3>
