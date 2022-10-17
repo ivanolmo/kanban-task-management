@@ -88,7 +88,7 @@ const EditBoard = () => {
         <div className='relative flex flex-col gap-2'>
           <label
             htmlFor='boardName'
-            className={`text-slate text-body-md ${
+            className={`text-slate dark:text-white text-body-md ${
               errors.boardName && 'text-red-600'
             }`}
           >
@@ -99,7 +99,7 @@ const EditBoard = () => {
             placeholder='e.g. Web Design'
             name='boardName'
             maxLength={20}
-            className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
+            className={`border-slate/25 ${
               errors?.boardName && 'border-red-600'
             }`}
           />
@@ -111,7 +111,7 @@ const EditBoard = () => {
         </div>
         <div className='flex flex-col gap-4 w-full'>
           <span
-            className={`text-slate text-body-md ${
+            className={`text-slate dark:text-white text-body-md ${
               errors?.columns && 'text-red-600'
             }`}
           >
@@ -130,7 +130,7 @@ const EditBoard = () => {
                   })}
                   disabled={field.columnName !== ''}
                   placeholder='e.g. Todo, Doing, Done'
-                  className={`block w-full border border-slate/25 rounded-md px-4 py-2 ${
+                  className={`border-slate/25 ${
                     errors?.columns?.[index] && 'border-red-600'
                   }`}
                 />

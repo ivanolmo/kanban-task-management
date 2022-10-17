@@ -71,7 +71,7 @@ const SidebarMobile = (props: SidebarMobileProps) => {
             className='max-w-sm w-full z-50 rounded-xl overflow-hidden'
             ref={sidebarRef}
           >
-            <div className='flex flex-col text-slate bg-white'>
+            <div className='flex flex-col text-slate bg-white dark:bg-gunmetal-800'>
               <div>
                 <h4 className='uppercase p-4'>
                   All Boards ({props.boards?.length || 0})
@@ -84,9 +84,8 @@ const SidebarMobile = (props: SidebarMobileProps) => {
                       board={board}
                     />
                   ))}
-                  <li className='py-4 px-6 rounded-r-full mr-4'>
-                    <a
-                      href='#'
+                  <li className='py-4 px-6 rounded-r-full mr-4 hover:bg-violet-700/10 dark:hover:bg-white cursor-pointer transition'>
+                    <div
                       className='flex items-center gap-3 text-md font-bold '
                       onClick={() => handleAddBoard()}
                     >
@@ -95,7 +94,7 @@ const SidebarMobile = (props: SidebarMobileProps) => {
                         <PlusIcon className='fill-violet-700' />
                         Create New Board
                       </span>
-                    </a>
+                    </div>
                   </li>
                 </ul>
               </div>

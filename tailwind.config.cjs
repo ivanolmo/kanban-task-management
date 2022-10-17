@@ -2,6 +2,7 @@
 
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     colors: {
       transparent: 'transparent',
@@ -17,6 +18,7 @@ module.exports = {
       red: {
         400: '#ff9898',
         600: '#ea5555',
+        900: '#ff0000',
       },
       richBlack: '#000112',
       slate: '#828fa3',

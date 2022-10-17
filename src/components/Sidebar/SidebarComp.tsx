@@ -19,7 +19,7 @@ const SidebarComp = (props: SidebarProps) => {
       className='!w-64 hidden md:block flex-shrink-0 z-10'
       aria-label='Sidebar'
     >
-      <div className='flex flex-col justify-between text-slate bg-white border-r border-indigo h-screen py-8'>
+      <div className='flex flex-col justify-between text-slate bg-white dark:bg-gunmetal-800 border-r border-indigo dark:border-gunmetal-700 h-screen py-8'>
         <div>
           <h4 className='uppercase ml-6'>
             All Boards ({props.boards?.length || 0})
@@ -32,10 +32,9 @@ const SidebarComp = (props: SidebarProps) => {
                 board={board}
               />
             ))}
-            <li className='py-4 px-6 rounded-r-full mr-4'>
-              <a
-                href='#'
-                className='flex items-center gap-3 text-md font-bold '
+            <li className='py-4 px-6 rounded-r-full mr-4 hover:bg-violet-700/10 dark:hover:bg-white cursor-pointer transition'>
+              <div
+                className='flex items-center gap-3 text-md font-bold'
                 onClick={() => store.toggleAddBoardModal()}
               >
                 <BoardIcon className='fill-violet-700' />
@@ -43,20 +42,20 @@ const SidebarComp = (props: SidebarProps) => {
                   <PlusIcon className='fill-violet-700' />
                   Create New Board
                 </span>
-              </a>
+              </div>
             </li>
           </ul>
         </div>
         <div className='flex flex-col gap-4'>
           <ThemeSwitcher />
           <div
-            className='flex items-center gap-3 mx-3 py-3.5 px-4 rounded-lg cursor-pointer group'
+            className='flex items-center gap-3 mr-4 py-3.5 px-4 rounded-r-full cursor-pointer group hover:bg-violet-700/10 dark:hover:bg-white transition'
             onClick={() => props.toggleSidebar()}
           >
-            <HideSidebarIcon className='fill-slate group-hover:fill-gunmetal-700' />
-            <span className='text-slate group-hover:text-gunmetal-700'>
+            <HideSidebarIcon className='fill-slate group-hover:fill-violet-700' />
+            <h3 className='text-slate group-hover:text-violet-700'>
               Hide Sidebar
-            </span>
+            </h3>
           </div>
         </div>
       </div>

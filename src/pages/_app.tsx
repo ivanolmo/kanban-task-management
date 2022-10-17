@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
+import { ThemeProvider } from 'next-themes';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { loggerLink } from '@trpc/client/links/loggerLink';
@@ -14,8 +15,10 @@ import type { AppRouter } from '@/server/router/app';
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <SessionProvider>
-      <Component {...pageProps} />
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ThemeProvider attribute='class'>
+        <Component {...pageProps} />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </ThemeProvider>
     </SessionProvider>
   );
 };

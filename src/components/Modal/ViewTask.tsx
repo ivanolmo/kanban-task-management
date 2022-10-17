@@ -34,6 +34,7 @@ const ViewTask: React.FC = () => {
 
   const {
     control,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -48,6 +49,18 @@ const ViewTask: React.FC = () => {
   const handleDelete = () => {
     store.toggleViewTaskModal();
     store.toggleDeleteTaskModal();
+  };
+
+  // const handleColumnMove = (columnId: string) => {
+  //   mutate({
+  //     id: store.selectedTask?.id as string,
+  //     columnId,
+  //   });
+  // };
+
+  const handleClose = () => {
+    store.toggleViewTaskModal();
+    // store.setSelectedTask(null);
   };
 
   useEffect(() => {
@@ -71,7 +84,7 @@ const ViewTask: React.FC = () => {
             handleEdit={() => console.log('edit')}
             toggleMenu={toggleMenu}
           />
-          <button onClick={() => store.toggleViewTaskModal()}>
+          <button onClick={() => handleClose()}>
             <CrossIcon className='stroke-red-600 w-6 h-6' />
           </button>
         </div>
