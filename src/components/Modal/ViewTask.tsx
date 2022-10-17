@@ -60,7 +60,7 @@ const ViewTask: React.FC = () => {
 
   const handleClose = () => {
     store.toggleViewTaskModal();
-    store.setSelectedTask(null);
+    // store.setSelectedTask(null);
   };
 
   useEffect(() => {
