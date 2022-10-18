@@ -10,6 +10,7 @@ const DeleteTask: React.FC = () => {
     onSuccess: () => {
       // TODO maybe just invalidate the column?
       trpcCtx.invalidateQueries(['boards.get-boards']);
+      store.clearSelectedTask();
       store.toggleDeleteTaskModal();
     },
   });
