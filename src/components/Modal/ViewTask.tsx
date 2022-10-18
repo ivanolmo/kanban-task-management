@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import useStore from 'src/store/boardStore';
 import { trpc } from '@/utils/trpc';
@@ -17,50 +17,38 @@ const ViewTask: React.FC = () => {
   const store = useStore();
   const trpcCtx = trpc.useContext();
 
-  const toggleMenu = useCallback(() => {
-    setShowMenu(!showMenu);
-  }, [showMenu]);
+  const { mutate, error, isLoading } = trpc.useMutation(['tasks.move-task'], {
+    onSuccess: () => {
+      // TODO check
+      trpcCtx.invalidateQueries(['boards.get-boards']);
+      store.clearSelectedTask();
+    },
+  });
 
-  const { mutate, error, isLoading } = trpc.useMutation(
-    ['tasks.move-task-column'],
-    {
-      onSuccess: () => {
-        // TODO check
-        trpcCtx.invalidateQueries(['boards.get-boards']);
-        store.toggleAddTaskModal();
-      },
-    }
-  );
-
-  const {
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm({
+  const { control } = useForm({
     defaultValues: {
-      columnId: {},
-      title: '',
-      description: '',
-      subtasks: [{ title: '' }, { title: '' }],
+      columnId: '',
     },
     mode: 'onBlur',
   });
+
+  const toggleMenu = useCallback(() => {
+    setShowMenu(!showMenu);
+  }, [showMenu]);
 
   const handleDelete = () => {
     store.toggleViewTaskModal();
     store.toggleDeleteTaskModal();
   };
 
-  // const handleColumnMove = (columnId: string) => {
-  //   mutate({
-  //     id: store.selectedTask?.id as string,
-  //     columnId,
-  //   });
-  // };
-
   const handleClose = () => {
     store.toggleViewTaskModal();
-    // store.setSelectedTask(null);
+    store.clearSelectedTask();
+  };
+
+  // mutation to move task to another column
+  const handleColumnMove = (columnId: string, taskId: string) => {
+    mutate({ columnId, taskId });
   };
 
   useEffect(() => {
@@ -89,10 +77,7 @@ const ViewTask: React.FC = () => {
           </button>
         </div>
       </div>
-      <form
-        onSubmit={() => console.log('view submit')}
-        className='space-y-6 w-full'
-      >
+      <div className='space-y-6 w-full'>
         <div className='flex flex-col gap-2'>
           <p className='text-slate text-body-lg'>
             {store.selectedTask?.description}
@@ -114,13 +99,13 @@ const ViewTask: React.FC = () => {
         </ul>
         <div className='flex flex-col gap-4 w-full'>
           <span className='text-slate text-body-md'>Current Status</span>
-          <Controller
-            name='columnId'
+          <Select
             control={control}
-            render={({ field }) => <Select field={field} />}
+            name='columnId'
+            handleColumnMove={handleColumnMove}
           />
         </div>
-      </form>
+      </div>
     </div>
   );
 };
