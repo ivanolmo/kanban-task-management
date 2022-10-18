@@ -63,10 +63,10 @@ export const taskRouter = createProtectedRouter()
       return subtask;
     },
   })
-  .mutation('move-task-column', {
+  .mutation('move-task', {
     input: z.object({
-      taskId: z.string(),
       columnId: z.string(),
+      taskId: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
       const task = await ctx.prisma.task.update({
