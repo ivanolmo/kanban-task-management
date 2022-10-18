@@ -1,3 +1,5 @@
+import type { Control, FieldPath, FieldValues } from 'react-hook-form';
+
 export type Column = {
   id: string;
   boardId: string;
@@ -35,3 +37,12 @@ export type Board = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export interface SelectProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+> {
+  name: TName;
+  control: Control<TFieldValues>;
+  handleColumnMove?: (columnId: string, taskId: string) => void;
+}
