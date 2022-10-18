@@ -2,10 +2,10 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form';
 
 import useStore from 'src/store/boardStore';
 import { trpc } from '@/utils/trpc';
-import Button from '../Button';
+import Button from '@/components/Button';
+import Select from '@/components/ui/Select';
 import CrossIcon from '@/assets/icon-cross.svg';
 import PlusIcon from '@/assets/icon-add-task-mobile.svg';
-import Select from '@/components/ui/Select';
 
 import type { CreateTaskInput } from '@/server/router/task';
 
@@ -27,7 +27,6 @@ const AddTask: React.FC = () => {
     formState: { errors },
   } = useForm<CreateTaskInput>({
     defaultValues: {
-      // nope
       columnId: {},
       title: '',
       description: '',
@@ -170,11 +169,7 @@ const AddTask: React.FC = () => {
           >
             Status
           </span>
-          <Controller
-            name='columnId'
-            control={control}
-            render={({ field }) => <Select field={field} />}
-          />
+          <Select control={control} name='columnId' />
           <Button type='submit' wide>
             <span>Create Task</span>
           </Button>
