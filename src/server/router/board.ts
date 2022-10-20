@@ -49,48 +49,65 @@ export const boardRouter = createProtectedRouter()
   .mutation('edit-board', {
     input: editBoardSchema,
     resolve: async ({ ctx, input }) => {
-      // update board name
-      const boardName = await ctx.prisma.board.update({
+      console.log('input', input);
+
+      // get existing board and columns to compare
+      const board = await ctx.prisma.board.findUnique({
         where: {
           id: input.id,
         },
-        data: {
-          boardName: input.boardName,
+        include: {
+          columns: true,
         },
       });
 
-      // get existing columns from db
-      const existingColumns = await ctx.prisma.column.findMany({
-        where: {
-          boardId: input.id,
-        },
-      });
+      // update board name if it has changed
+      if (board?.boardName !== input.boardName) {
+        await ctx.prisma.board.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            boardName: input.boardName,
+          },
+        });
+        return input.boardName;
+      }
 
-      // filter existing columns out of the input from client
-      const filteredColumns = input.columns.filter(
+      // filter new columns from input
+      const columnsToCreate = input.columns.filter(
         (column) =>
-          !existingColumns.find((c) => c.columnName === column.columnName)
+          !board?.columns?.some((c) => c.columnName === column.columnName)
       );
 
-      // delete columns removed from edit modal
-      const deletedColumns = await ctx.prisma.column.deleteMany({
-        where: {
-          boardId: input.id,
-          columnName: {
-            notIn: input.columns.map((column) => column.columnName),
+      // filter existing columns from input
+      const columnsToDelete = board?.columns?.filter(
+        (column) =>
+          !input.columns?.some((c) => c.columnName === column.columnName)
+      );
+
+      // create new columns
+      if (columnsToCreate && columnsToCreate?.length > 0) {
+        await ctx.prisma.column.createMany({
+          data: columnsToCreate.map((column) => ({
+            columnName: column.columnName,
+            boardId: input.id,
+          })),
+        });
+        return columnsToCreate;
+      }
+
+      // delete columns
+      if (columnsToDelete && columnsToDelete?.length > 0) {
+        await ctx.prisma.column.deleteMany({
+          where: {
+            id: {
+              in: columnsToDelete?.map((column) => column.id),
+            },
           },
-        },
-      });
-
-      // create columns added to edit modal
-      const createdColumns = await ctx.prisma.column.createMany({
-        data: filteredColumns.map((column) => ({
-          columnName: column.columnName,
-          boardId: input.id,
-        })),
-      });
-
-      return { boardName, deletedColumns, createdColumns };
+        });
+        return columnsToDelete;
+      }
     },
   })
   .mutation('delete-board', {
