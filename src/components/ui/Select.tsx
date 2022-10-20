@@ -1,34 +1,56 @@
 import { Fragment, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import type { FieldValues, UseFormSetValue } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 import clsx from 'clsx';
+
+import type { FieldPath, FieldValues } from 'react-hook-form';
 
 import useStore from 'src/store/boardStore';
 import ChevronDownIcon from '@/assets/icon-chevron-down.svg';
 import CheckIcon from '@/assets/icon-check.svg';
 
-type SelectProps = {
-  field: FieldValues;
-  handleColumnMove?: (columnId: string) => void;
-};
+import type { SelectProps } from 'src/types/boardTypes';
 
-const Select = (props: SelectProps): JSX.Element => {
+const Select = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+>(
+  props: SelectProps<TFieldValues, TName>
+): JSX.Element => {
+  const {
+    field: { value, onChange },
+  } = useController(props);
+
   const store = useStore();
-  console.log('props select -> ', props);
-  const { onChange, value } = props.field;
+
   const { handleColumnMove } = props;
 
-  // set default select value to todo if new task, else set to current column
-  console.log('store.selectedTask ', store.selectedTask);
+  // on mount set default select value to todo if new task, or current column if viewing task
   useEffect(() => {
     if (!store.selectedTask) {
-      // set select value if new task
-      console.log('useeffect first');
+      onChange(store.selectedBoard?.columns[0]);
     } else {
-      // set select value if existing task
-      console.log('useeffect second');
+      onChange(
+        store.selectedBoard?.columns.find(
+          (column) => column.id === store.selectedTask?.columnId
+        )
+      );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store.selectedBoard?.columns, store.selectedTask]);
+
+  // this fires if existing task and user changes column
+  useEffect(() => {
+    if (
+      store.selectedTask &&
+      Object.keys(value).length &&
+      value.id !== store.selectedTask?.columnId
+    ) {
+      handleColumnMove &&
+        handleColumnMove(value.id, store.selectedTask?.id as string);
+      store.toggleViewTaskModal();
+    }
+  }, [handleColumnMove, store, value]);
 
   return (
     <Listbox value={value} onChange={onChange}>
@@ -54,44 +76,46 @@ const Select = (props: SelectProps): JSX.Element => {
             leaveTo='opacity-0'
           >
             <Listbox.Options className='absolute w-full overflow-auto rounded-md bg-white dark:bg-zinc text-body-lg shadow-xl'>
-              {store.selectedBoard?.columns.map((column) => (
-                <Listbox.Option
-                  key={column.id}
-                  className={({ active }) =>
-                    clsx(
-                      'relative group px-4 py-2 cursor-pointer',
-                      active ? 'bg-violet-700 text-white' : 'text-slate',
-                      value.columnName === column.columnName
-                        ? 'bg-violet-700 text-white'
-                        : 'text-slate'
-                    )
-                  }
-                  value={{
-                    id: column.id,
-                    columnName: column.columnName,
-                  }}
-                >
-                  {() => (
-                    <>
-                      <span
-                        className={clsx(
-                          'block',
-                          value.columnName === column.columnName
-                            ? 'font-bold'
-                            : 'font-normal'
-                        )}
-                      >
-                        {column.columnName}
-                      </span>
-                      {value.columnName === column.columnName && (
-                        <span className='absolute right-4 top-4 stroke-white'>
-                          <CheckIcon />
+              {store.selectedBoard?.columns.map((column) => {
+                return (
+                  <Listbox.Option
+                    key={column.id}
+                    className={({ active }) =>
+                      clsx(
+                        'relative group px-4 py-2 cursor-pointer',
+                        active ? 'bg-violet-700 text-white' : 'text-slate',
+                        value.columnName === column.columnName
+                          ? 'bg-violet-700 text-white'
+                          : 'text-slate'
+                      )
+                    }
+                    value={{
+                      id: column.id,
+                      columnName: column.columnName,
+                    }}
+                  >
+                    {() => (
+                      <>
+                        <span
+                          className={clsx(
+                            'block',
+                            value.columnName === column.columnName
+                              ? 'font-bold'
+                              : 'font-normal'
+                          )}
+                        >
+                          {column.columnName}
                         </span>
-                      )}
-                    </>
-                  )}
-                </Listbox.Option>
-              ))}
+                        {value.columnName === column.columnName && (
+                          <span className='absolute right-4 top-4 stroke-white'>
+                            <CheckIcon />
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </Listbox.Option>
+                );
+              })}
             </Listbox.Options>
           </Transition>
         </div>

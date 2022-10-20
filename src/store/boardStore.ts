@@ -6,7 +6,8 @@ type BoardStore = {
   selectedBoard: Board | null;
   setSelectedBoard: (board: Board) => void;
   selectedTask: Task | null;
-  setSelectedTask: (task: Task) => void;
+  setSelectedTask: (task: Task | null) => void;
+  clearSelectedTask: () => void;
   showMobileSidebar: boolean;
   toggleMobileSidebar: () => void;
   showAddBoardModal: boolean;
@@ -27,7 +28,8 @@ const useStore = create<BoardStore>((set) => ({
   selectedBoard: null,
   setSelectedBoard: (board: Board) => set({ selectedBoard: board }),
   selectedTask: null,
-  setSelectedTask: (task: Task) => set({ selectedTask: task }),
+  setSelectedTask: (task: Task | null) => set({ selectedTask: task }),
+  clearSelectedTask: () => set({ selectedTask: null }),
   showMobileSidebar: false,
   toggleMobileSidebar: () =>
     set((state: { showMobileSidebar: boolean }) => ({
