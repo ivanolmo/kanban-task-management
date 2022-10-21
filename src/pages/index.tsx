@@ -22,6 +22,7 @@ import PlusIcon from '@/assets/icon-add-task-mobile.svg';
 import ShowSidebarIcon from '@/assets/icon-show-sidebar.svg';
 
 import type { Board, Column } from 'src/types/boardTypes';
+import EditTask from '@/components/Modal/EditTask';
 
 const Home: NextPage = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -181,6 +182,11 @@ const Home: NextPage = () => {
         {store.showDeleteTaskModal && (
           <ModalContainer>
             <DeleteTask />
+          </ModalContainer>
+        )}
+        {store.showEditTaskModal && (
+          <ModalContainer>
+            <EditTask />
           </ModalContainer>
         )}
       </main>

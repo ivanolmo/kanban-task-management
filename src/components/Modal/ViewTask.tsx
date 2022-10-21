@@ -41,6 +41,11 @@ const ViewTask: React.FC = () => {
     store.toggleDeleteTaskModal();
   };
 
+  const handleEdit = () => {
+    store.toggleViewTaskModal();
+    store.toggleEditTaskModal();
+  };
+
   const handleClose = () => {
     store.toggleViewTaskModal();
     store.clearSelectedTask();
@@ -69,7 +74,7 @@ const ViewTask: React.FC = () => {
           <Submenu
             showMenu={showMenu}
             handleDelete={handleDelete}
-            handleEdit={() => console.log('edit')}
+            handleEdit={handleEdit}
             toggleMenu={toggleMenu}
           />
           <button onClick={() => handleClose()}>
