@@ -12,7 +12,7 @@ const ColumnComp = (props: ColumnProps): JSX.Element => {
       <div className='flex items-center gap-3 text-slate uppercase'>
         <span
           className='w-4 h-4 rounded-full flex-shrink-0'
-          style={{ backgroundColor: `#${props.column.accentColor}` }}
+          style={{ backgroundColor: props.column.accentColor }}
         ></span>
         <h4>{props.column?.columnName}</h4>
         <span className='text-body-md tracking-widest -ml-2'>{`(${props.column?.tasks?.length})`}</span>

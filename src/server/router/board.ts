@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { createProtectedRouter } from './utils/protected-procedure';
+import { COLUMN_COLORS } from '@/server/constants/COLUMN_COLORS';
 
 const createBoardSchema = z.object({
   boardName: z.string(),
@@ -21,15 +22,12 @@ export type CreateBoardInput = z.TypeOf<typeof createBoardSchema>;
 export type CreateColumnInput = z.TypeOf<typeof createColumnSchema>;
 export type EditBoardInput = z.TypeOf<typeof editBoardSchema>;
 
+const colors = COLUMN_COLORS.sort(() => Math.random() - 0.5);
+
 export const boardRouter = createProtectedRouter()
   .mutation('create-board', {
     input: createBoardSchema,
     resolve: async ({ ctx, input }) => {
-      // fetch random colors for columns
-      const randomColors = await fetch(
-        'https://www.colr.org/json/colors/random/10'
-      ).then((res) => res.json());
-
       const createBoard = await ctx.prisma.board.create({
         data: {
           boardName: input.boardName,
@@ -37,7 +35,7 @@ export const boardRouter = createProtectedRouter()
             createMany: {
               data: input.columns.map((column, index) => ({
                 columnName: column.columnName,
-                accentColor: randomColors.colors[index].hex,
+                accentColor: colors[index] ?? '#000000',
               })),
             },
           },
@@ -55,11 +53,6 @@ export const boardRouter = createProtectedRouter()
   .mutation('edit-board', {
     input: editBoardSchema,
     resolve: async ({ ctx, input }) => {
-      // fetch random colors for columns
-      const randomColors = await fetch(
-        'https://www.colr.org/json/colors/random/10'
-      ).then((res) => res.json());
-
       // get existing board and columns to compare
       const board = await ctx.prisma.board.findUnique({
         where: {
@@ -97,11 +90,13 @@ export const boardRouter = createProtectedRouter()
       // create new columns
       if (columnsToCreate && columnsToCreate?.length > 0) {
         await ctx.prisma.column.createMany({
-          data: columnsToCreate.map((column, index) => ({
-            columnName: column.columnName,
-            accentColor: randomColors.colors[index].hex,
-            boardId: input.id,
-          })),
+          data: columnsToCreate.map((column, index) => {
+            return {
+              columnName: column.columnName,
+              accentColor: colors[index] ?? '#000000',
+              boardId: input.id,
+            };
+          }),
         });
       }
 
