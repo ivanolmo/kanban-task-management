@@ -36,7 +36,7 @@ const Home: NextPage = () => {
     isError,
   } = trpc.useQuery(['boards.get-boards'], {
     enabled: !!session?.data?.user,
-    // refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false,
     onSuccess: (data: Board[]) => {
       store.setSelectedBoard(data[0] as Board);
     },
