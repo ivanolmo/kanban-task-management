@@ -25,13 +25,19 @@ export const boardRouter = createProtectedRouter()
   .mutation('create-board', {
     input: createBoardSchema,
     resolve: async ({ ctx, input }) => {
+      // fetch random colors for columns
+      const randomColors = await fetch(
+        'https://www.colr.org/json/colors/random/10'
+      ).then((res) => res.json());
+
       const createBoard = await ctx.prisma.board.create({
         data: {
           boardName: input.boardName,
           columns: {
             createMany: {
-              data: input.columns.map((column) => ({
+              data: input.columns.map((column, index) => ({
                 columnName: column.columnName,
+                accentColor: randomColors.colors[index].hex,
               })),
             },
           },
@@ -49,6 +55,11 @@ export const boardRouter = createProtectedRouter()
   .mutation('edit-board', {
     input: editBoardSchema,
     resolve: async ({ ctx, input }) => {
+      // fetch random colors for columns
+      const randomColors = await fetch(
+        'https://www.colr.org/json/colors/random/10'
+      ).then((res) => res.json());
+
       // get existing board and columns to compare
       const board = await ctx.prisma.board.findUnique({
         where: {
@@ -86,8 +97,9 @@ export const boardRouter = createProtectedRouter()
       // create new columns
       if (columnsToCreate && columnsToCreate?.length > 0) {
         await ctx.prisma.column.createMany({
-          data: columnsToCreate.map((column) => ({
+          data: columnsToCreate.map((column, index) => ({
             columnName: column.columnName,
+            accentColor: randomColors.colors[index].hex,
             boardId: input.id,
           })),
         });
@@ -143,5 +155,31 @@ export const boardRouter = createProtectedRouter()
       });
 
       return boards;
+    },
+  })
+  .query('get-board', {
+    input: z.string(),
+    resolve: async ({ ctx, input }) => {
+      const board = await ctx.prisma.board.findUnique({
+        where: {
+          id: input,
+        },
+        include: {
+          columns: {
+            orderBy: {
+              createdAt: 'asc',
+            },
+            include: {
+              tasks: {
+                include: {
+                  subtasks: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return board;
     },
   });
