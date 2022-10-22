@@ -44,7 +44,7 @@ const Home: NextPage = () => {
 
   const toggleSidebar = () => setSidebarVisible(!sidebarVisible);
 
-  // closes md+ sidebar on window resize to mobile
+  // closes mobile or regular sidebar on media query
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -52,10 +52,14 @@ const Home: NextPage = () => {
       if (isMobile) {
         setSidebarVisible(false);
       }
+
+      if (!isMobile && store.showMobileSidebar) {
+        store.toggleMobileSidebar();
+      }
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [store]);
 
   if (!session.data) {
     return (
