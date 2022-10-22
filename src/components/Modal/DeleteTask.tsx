@@ -8,7 +8,6 @@ const DeleteTask: React.FC = () => {
 
   const { mutate, error, isLoading } = trpc.useMutation(['tasks.delete-task'], {
     onSuccess: () => {
-      // TODO maybe just invalidate the column?
       trpcCtx.invalidateQueries(['boards.get-boards']);
       store.clearSelectedTask();
       store.toggleDeleteTaskModal();

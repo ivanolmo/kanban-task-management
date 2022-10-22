@@ -49,8 +49,6 @@ export const boardRouter = createProtectedRouter()
   .mutation('edit-board', {
     input: editBoardSchema,
     resolve: async ({ ctx, input }) => {
-      console.log('input', input);
-
       // get existing board and columns to compare
       const board = await ctx.prisma.board.findUnique({
         where: {
@@ -71,7 +69,6 @@ export const boardRouter = createProtectedRouter()
             boardName: input.boardName,
           },
         });
-        return input.boardName;
       }
 
       // filter new columns from input
@@ -94,7 +91,6 @@ export const boardRouter = createProtectedRouter()
             boardId: input.id,
           })),
         });
-        return columnsToCreate;
       }
 
       // delete columns
@@ -106,7 +102,6 @@ export const boardRouter = createProtectedRouter()
             },
           },
         });
-        return columnsToDelete;
       }
     },
   })

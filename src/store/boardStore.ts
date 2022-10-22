@@ -22,6 +22,8 @@ type BoardStore = {
   toggleAddTaskModal: () => void;
   showDeleteTaskModal: boolean;
   toggleDeleteTaskModal: () => void;
+  showEditTaskModal: boolean;
+  toggleEditTaskModal: () => void;
 };
 
 const useStore = create<BoardStore>((set) => ({
@@ -64,6 +66,11 @@ const useStore = create<BoardStore>((set) => ({
   toggleDeleteTaskModal: () =>
     set((state: { showDeleteTaskModal: boolean }) => ({
       showDeleteTaskModal: !state.showDeleteTaskModal,
+    })),
+  showEditTaskModal: false,
+  toggleEditTaskModal: () =>
+    set((state: { showEditTaskModal: boolean }) => ({
+      showEditTaskModal: !state.showEditTaskModal,
     })),
 }));
 

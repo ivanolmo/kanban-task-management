@@ -43,6 +43,7 @@ const Select = <
   useEffect(() => {
     if (
       store.selectedTask &&
+      !store.showEditTaskModal &&
       Object.keys(value).length &&
       value.id !== store.selectedTask?.columnId
     ) {
@@ -84,7 +85,7 @@ const Select = <
                       clsx(
                         'relative group px-4 py-2 cursor-pointer',
                         active ? 'bg-violet-700 text-white' : 'text-slate',
-                        value.columnName === column.columnName
+                        value.id === column.id
                           ? 'bg-violet-700 text-white'
                           : 'text-slate'
                       )
@@ -99,14 +100,12 @@ const Select = <
                         <span
                           className={clsx(
                             'block',
-                            value.columnName === column.columnName
-                              ? 'font-bold'
-                              : 'font-normal'
+                            value.id === column.id ? 'font-bold' : 'font-normal'
                           )}
                         >
                           {column.columnName}
                         </span>
-                        {value.columnName === column.columnName && (
+                        {value.id === column.id && (
                           <span className='absolute right-4 top-4 stroke-white'>
                             <CheckIcon />
                           </span>
