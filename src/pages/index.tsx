@@ -42,6 +42,8 @@ const Home: NextPage = () => {
     },
   });
 
+  const toggleSidebar = () => setSidebarVisible(!sidebarVisible);
+
   // closes md+ sidebar on window resize to mobile
   useEffect(() => {
     const handleResize = () => {
@@ -54,8 +56,6 @@ const Home: NextPage = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const toggleSidebar = () => setSidebarVisible(!sidebarVisible);
 
   if (!session.data) {
     return (
