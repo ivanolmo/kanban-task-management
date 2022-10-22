@@ -3,6 +3,7 @@ import type { Control, FieldPath, FieldValues } from 'react-hook-form';
 export type Column = {
   id: string;
   boardId: string;
+  accentColor: string;
   columnName: string;
   tasks: Task[];
   createdAt: Date;
