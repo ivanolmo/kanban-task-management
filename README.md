@@ -15,7 +15,7 @@ The live site is hosted with Vercel: https://nextjs-kanban.vercel.app (disclaime
 - [TypeScript](https://www.typescriptlang.org/docs/handbook/react.html)
 - [tRPC](https://trpc.io)
 - [Prisma](https://prisma.io)
-- PostgreSQL via [Supabase](https://supabase.com)
+- [MongoDB](https://www.mongodb.com)
 - [Zustand](https://github.com/pmndrs/zustand) for state management
 - Tailwind CSS
 
@@ -33,9 +33,9 @@ My TypeScript experience has been fun so far. I absolutely see the benefits, and
 
 tRPC (TypeScript remote procedure call) makes it easy to share types across your app, and gives you type-safety and auto-completion in your client side code. It works great with Next.js because your server and client code is all part of the same code base.
 
-### Prisma and PostgreSQL
+### Prisma and MongoDB
 
-Prisma is a fully type-safe API used to query a database. It can be used with both SQL and NoSQL databases, and in this project I'm using it with a PostgreSQL database on [Supabase](https://supabase.com). I decided what I wanted my data model to look like and created a `prisma.schema` file, and Prisma took care of creating all the tables and relations. It's an ORM, so it also takes care of the SQL queries (you don't have to write them out manually!). Setting up the database on Supabase was a breeze, and I had no issues getting my app connected.
+Prisma is a fully type-safe API used to query a database. It can be used with both SQL and NoSQL databases, and in this project I'm using it with a MongoDB database. I decided what I wanted my data model to look like and created a `prisma.schema` file, and Prisma took care of creating all the tables and relations. It's an ORM, so it also takes care of the queries (you don't have to write them out manually!). Working with MongoDB is a breeze, and I had no issues getting my app connected.
 
 ### Zustand
 
